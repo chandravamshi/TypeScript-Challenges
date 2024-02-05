@@ -1,0 +1,1 @@
+https://typehero.dev/challenge/tuple-to-object?code=C4TwDgpgBAKgrmANhGB7A8gIwFYQMbAA8MUEAHsBAHYAmAzlAE4QCGNqViIUACo6pEagA0hBABtALoA+KAF4oAbyjjhUAJZVY4qnAC2mCI0mSAXFGEBfIA
