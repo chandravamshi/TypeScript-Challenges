@@ -17,6 +17,20 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 
 ## Concepts
 
+### PropertyKey
+
+1. Definition: PropertyKey is a built-in TypeScript type that represents the type of values that can be used as property names in JavaScript.
+2. Examples of PropertyKeys:
+    PropertyKeys can be:
+      Strings: 'name', 'age'
+      Numbers: 42, 3.14
+      Symbols: Symbol('unique')
+3. Usage in TypeScript: It's often used in scenarios where you want to allow a variety of values to be used as keys in objects or as indices in arrays.
+4.  Basic Usage:
+ ```
+const propertyName: PropertyKey = 'name';
+```
+
 ### Readonly
 
 ```
@@ -39,3 +53,17 @@ Let's break down the expression {readonly [P in keyof T]: T[P]}; and understand 
 3.  T[P]: For each P (which is a key of T), it gets the type of the corresponding property in T. For example, if P is "name", then T[P] is equivalent to T["name"], which is the type of the name property in T.
 4.  readonly [P in keyof T]: T[P]: The readonly modifier is applied to each property. This means that once an object is created with this type, you cannot modify the value of its properties after creation.
 5.  { ... }: This part encapsulates the whole mapped type definition.
+
+### Tuple to Object
+```
+const tuple = ['tesla', 'model 3', 'model X', 'model Y'] as const;
+
+type result = TupleToObject<typeof tuple>;
+// Expected: { 'tesla': 'tesla', 'model 3': 'model 3', 'model X': 'model X', 'model Y': 'model Y'}
+
+type TupleToObject<T extends readonly PropertyKey[]> = { [K in T[number]]: K };
+```
+##### Explanation
+1. Type Parameter: T extends readonly PropertyKey[]: This ensures that T is an array of PropertyKey types, meaning the keys of the resulting object must be valid property keys.
+2. Mapped Type: { [K in T[number]]: K }: This is a mapped type that iterates over each element K in the array T. T[number] gets the union type of all elements in T, and K is then each individual element in this union.
+3. Object Shape: { [K in T[number]]: K } ensures that the resulting object has keys and values where the key is the same as the value.
