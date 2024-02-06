@@ -1,0 +1,1 @@
+https://typehero.dev/challenge/first-of-array?code=C4TwDgpgBAYglgJwM7ADwBUoQB7AgOwBMkoBDfEAbQF0A+KAXiikxzyJMrnwDMIFYiFABooAOgnc+AgEoQU1KAH5ByYFABcUfBABu-ANwAoIA
