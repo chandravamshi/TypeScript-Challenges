@@ -17,6 +17,33 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 
 ## Concepts
 
+
+### First of Array
+
+```
+type First<T extends any[]> = T extends [infer First, ...infer Rest] ? First : never;
+
+// Example 
+type arr1 = ['a', 'b', 'c'];
+type arr2 = [1, 2, 3];
+
+type head1 = First<arr1>; // inferred type: string ('a')
+type head2 = First<arr2>; // inferred type: number (1)
+
+```
+##### Explanation
+Let's break down the line type First<T extends any[]> = T extends [infer First, ...infer Rest] ? First : never; step by step:
+
+1. type First<T extends any[]>: This declares a new type alias First that takes a generic type T, which must be an array.
+
+2. T extends [infer First, ...infer Rest]: This is a conditional type check. It checks if the type T matches a pattern where it's an array with at least one element. The infer keyword is used to capture the type of the first element as First and the remaining elements as Rest.
+
+3. infer First: The infer keyword is used to infer the type of the first element of the array T and assign it to the type variable First.
+
+4. ...infer Rest: The rest operator (...) captures the remaining elements of the array T after the first element and assigns them to the type variable Rest.
+
+5. ? First : never;: This is the ternary conditional operator. If the condition T extends [infer First, ...infer Rest] is true, it returns the inferred type First. Otherwise, it returns never.
+
 ### PropertyKey
 
 1. Definition: PropertyKey is a built-in TypeScript type that represents the type of values that can be used as property names in JavaScript.
