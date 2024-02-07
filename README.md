@@ -16,6 +16,8 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 
 
 ## Concepts
+* [Tuple Vs Array](#tuple-vs-array)
+* [Readonly](#readonly)
 
 ### Tuple Vs Array
 
