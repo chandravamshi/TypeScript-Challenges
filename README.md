@@ -19,7 +19,48 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [Tuple Vs Array](#tuple-vs-array)
 * [First of Array](#first-of-array)
 * [Readonly](#readonly)
+* [Exclude](#exclude)
 
+### Exclude
+
+The `Exclude` utility type in TypeScript removes types from a union that are assignable to another type. Here's how you can implement it on our own:
+
+```typescript
+type MyExclude<T, U> = T extends U ? never : T;
+
+// Example usage
+type Result = MyExclude<'a' | 'b' | 'c', 'a'>; // Result: 'b' | 'c'
+```
+
+Explanation:
+- `T extends U ? never : T;`: This conditional type checks if each type in `T` is assignable to `U`. If it is, it replaces it with `never`, effectively removing it from the resulting type. If it's not assignable to `U`, it keeps the type unchanged.
+- `Result`: When `MyExclude<'a' | 'b' | 'c', 'a'>` is evaluated, it removes `'a'` from the union `'a' | 'b' | 'c'`, resulting in `'b' | 'c'`.
+
+More detailed explanation:
+Let's break down the `MyExclude` type:
+
+- `type MyExclude<T, U>`: This is a generic type that takes two type parameters, `T` and `U`.
+- `T extends U ? never : T;`: This is a conditional type. It checks if each type in `T` is assignable to `U`. If it is, it results in `never`, effectively removing that type from the resulting type. If it's not assignable to `U`, it keeps the type unchanged.
+
+Now, let's see how it works with the provided example:
+
+```typescript
+type Result = MyExclude<'a' | 'b' | 'c', 'a'>;
+```
+
+In this example:
+- `T` is the union type `'a' | 'b' | 'c'`.
+- `U` is the type `'a'`.
+
+For each type in `T`, the conditional type checks if it's assignable to `'a'`. Here's the breakdown:
+
+- `'a' extends 'a'` evaluates to `true`, so it results in `never`. This removes `'a'` from the resulting type.
+- `'b' extends 'a'` and `'c' extends 'a'` both evaluate to `false`, so they remain unchanged.
+
+After applying the conditional type to each type in `T`, the resulting type becomes `'b' | 'c'`, which excludes `'a'`. So, the `Result` type is `'b' | 'c'`.
+
+
+---
 ### Tuple Vs Array
 
 The syntax for declaring tuples and arrays can look similar because they both use square brackets. However, there are subtle differences:
@@ -91,7 +132,8 @@ type head1 = First<arr1>; // inferred type: string ('a')
 type head2 = First<arr2>; // inferred type: number (1)
 
 ```
-##### Explanation
+**Explanation**
+
 Let's break down the line type First<T extends any[]> = T extends [infer First, ...infer Rest] ? First : never; step by step:
 
 1. type First<T extends any[]>: This declares a new type alias First that takes a generic type T, which must be an array.
@@ -132,7 +174,8 @@ readOnlyObj.name = 'Jane';
 ```
 In this example, MakeReadOnly takes an object type (Example) and returns a new type (ReadOnlyExample) where all properties are readonly. The obj object can be assigned properties during creation, but those properties cannot be modified afterward.
 
-##### Explanation
+**Explanation**
+
 Let's break down the expression {readonly [P in keyof T]: T[P]}; and understand how it works step by step:
 
 1. keyof T: This part gets all the keys of the type T. For example, if T is { name: string; age: number; }, then keyof T will be the union type "name" | "age".
@@ -150,7 +193,7 @@ type result = TupleToObject<typeof tuple>;
 
 type TupleToObject<T extends readonly PropertyKey[]> = { [K in T[number]]: K };
 ```
-##### Explanation
+**Explanation**
 1. Type Parameter: T extends readonly PropertyKey[]: This ensures that T is an array of PropertyKey types, meaning the keys of the resulting object must be valid property keys.
 2. Mapped Type: { [K in T[number]]: K }: This is a mapped type that iterates over each element K in the array T. T[number] gets the union type of all elements in T, and K is then each individual element in this union.
 3. Object Shape: { [K in T[number]]: K } ensures that the resulting object has keys and values where the key is the same as the value.
