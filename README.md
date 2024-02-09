@@ -20,6 +20,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [First of Array](#first-of-array)
 * [Readonly](#readonly)
 * [Exclude](#exclude)
+* [PromiseLike](#promiselike)
 
 ### Exclude
 
