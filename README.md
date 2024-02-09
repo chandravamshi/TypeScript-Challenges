@@ -197,3 +197,53 @@ type TupleToObject<T extends readonly PropertyKey[]> = { [K in T[number]]: K };
 1. Type Parameter: T extends readonly PropertyKey[]: This ensures that T is an array of PropertyKey types, meaning the keys of the resulting object must be valid property keys.
 2. Mapped Type: { [K in T[number]]: K }: This is a mapped type that iterates over each element K in the array T. T[number] gets the union type of all elements in T, and K is then each individual element in this union.
 3. Object Shape: { [K in T[number]]: K } ensures that the resulting object has keys and values where the key is the same as the value.
+
+---
+
+### PromiseLIke
+1. **PromiseLike Interface**:
+   - `PromiseLike` is an interface in TypeScript.
+   - It represents an object that looks like a promise, meaning it has a `then` method.
+   - The `then` method is used for asynchronous actions and allows you to specify what to do when a promise is fulfilled (resolved) or rejected.
+
+2. **Purpose**:
+   - `PromiseLike` is used to define types that behave like promises but may not necessarily be instances of the built-in `Promise` class.
+   - This allows TypeScript to work with a broader range of asynchronous APIs and functions.
+
+3. **Usage**:
+   - You can use `PromiseLike` in type annotations to specify that a value is expected to have a `then` method and behave like a promise.
+   - For example:
+     ```typescript
+     function asyncFunction(): PromiseLike<number> {
+       // Some asynchronous logic
+       return {
+         then: (onfulfilled: (arg: number) => any) => {
+           // Simulating a resolved promise
+           onfulfilled(42);
+         }
+       };
+     }
+     ```
+
+4. **Type Inference**:
+   - When you specify a type as `PromiseLike<T>`, TypeScript infers that the type represents an object that may have a `then` method, typically used for chaining asynchronous operations.
+   - This allows you to work with custom promise-like objects that adhere to the same asynchronous API as native promises.
+
+5. **Compatibility**:
+   - TypeScript's `PromiseLike` interface makes it easier to work with various libraries and APIs that use promise-like objects, even if they are not instances of `Promise`.
+   - It provides a level of interoperability by allowing TypeScript to understand and validate asynchronous code that uses custom promise-like objects.
+
+6. **Example**:
+   ```typescript
+   type MyPromiseLike<T> = {
+     then(onfulfilled: (value: T) => any): any;
+   };
+
+   function processPromise(promise: MyPromiseLike<number>): void {
+     promise.then((value) => {
+       console.log(`Received value: ${value}`);
+     });
+   }
+   ```
+
+In summary, `PromiseLike` is a TypeScript interface that defines the shape of objects representing promises or promise-like behavior. It enables TypeScript to work with a wider range of asynchronous patterns and enhances the interoperability of TypeScript code with various libraries and APIs.
