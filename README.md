@@ -22,6 +22,41 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [Readonly](#readonly)
 * [PromiseLike](#promiselike)
 
+
+
+### If 
+
+```typescript
+type If<Condition extends boolean, TrueType, FalseType> = Condition extends true ? TrueType : FalseType;
+```
+
+Type Parameters
+
+- `Condition`: Represents the boolean condition that determines which type to select.
+- `TrueType`: Represents the type to be returned if the condition is `true`.
+- `FalseType`: Represents the type to be returned if the condition is `false`.
+
+Type Inference
+
+- The `Condition` parameter is evaluated to check if it extends `boolean`. If it does not extend `boolean`, TypeScript will throw an error.
+- If `Condition` is `true`, the `TrueType` is returned. Otherwise, the `FalseType` is returned.
+
+Usage
+
+```typescript
+type IsNumber<T> = T extends number ? true : false;
+
+type Result1 = If<IsNumber<42>, 'Number', 'Not a Number'>; // Result1: 'Number'
+type Result2 = If<IsNumber<'Hello'>, 'Number', 'Not a Number'>; // Result2: 'Not a Number'
+```
+
+In these examples:
+- `IsNumber<42>` evaluates to `true`, so `Result1` is `'Number'`.
+- `IsNumber<'Hello'>` evaluates to `false`, so `Result2` is `'Not a Number'`.
+
+This way, the `If` utility type allows us to conditionally select types based on boolean conditions in TypeScript.
+
+---
 ### Exclude
 
 The `Exclude` utility type in TypeScript removes types from a union that are assignable to another type. Here's how you can implement it on our own:
