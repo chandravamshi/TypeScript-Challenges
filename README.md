@@ -23,7 +23,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [Readonly](#readonly)
 * [PromiseLike](#promiselike)
 
-
+---
 
 ### If 
 
