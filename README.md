@@ -16,6 +16,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 
 
 ## Concepts
+* [If](#if)
 * [Exclude](#exclude)
 * [Tuple Vs Array](#tuple-vs-array)
 * [First of Array](#first-of-array)
