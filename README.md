@@ -26,6 +26,62 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 
 ---
 
+
+### Unknown
+
+1. **Definition**: `unknown` is a type in TypeScript that represents a value whose type is not known at compile time. It is the type-safe counterpart of the `any` type. Variables of type `unknown` can hold any value, similar to `any`, but you can't perform operations on them without first narrowing their type.
+
+2. **Example**:
+   ```typescript
+   let userInput: unknown;
+   userInput = 5; // valid
+   userInput = 'hello'; // valid
+   ```
+
+### Type Checking and Narrowing `unknown`:
+
+1. **Type Checking**: Since the type of an `unknown` variable is not known, TypeScript won't allow you to perform most operations on it without narrowing its type first. This ensures type safety.
+
+2. **Type Narrowing**: You can narrow the type of an `unknown` variable using type assertions, type guards, or control flow analysis.
+
+   - **Type Assertions**:
+     ```typescript
+     let userInput: unknown;
+     let username = userInput as string; // Assertion: tells TypeScript that `userInput` is a string
+     ```
+
+   - **Type Guards**:
+     ```typescript
+     function isString(value: unknown): value is string {
+       return typeof value === 'string';
+     }
+
+     let userInput: unknown;
+     if (isString(userInput)) {
+       // Within this block, TypeScript knows `userInput` is a string
+       console.log(userInput.toUpperCase());
+     }
+     ```
+
+   - **Control Flow Analysis**:
+     ```typescript
+     let userInput: unknown;
+     if (typeof userInput === 'string') {
+       // Within this block, TypeScript knows `userInput` is a string
+       console.log(userInput.toUpperCase());
+     }
+     ```
+
+### Differences from `any`:
+
+1. **Type Safety**: `unknown` provides more type safety compared to `any`. While `any` allows unrestricted operations, `unknown` requires type checking before performing operations, reducing the risk of runtime errors.
+
+2. **Type Inference**: Variables of type `unknown` retain their type information. Unlike `any`, where TypeScript gives up type checking, `unknown` variables still undergo type inference and are checked for type compatibility.
+
+Overall, `unknown` is a useful tool for working with values of uncertain type while maintaining type safety in TypeScript.
+
+---
+
 ### If 
 
 ```typescript
