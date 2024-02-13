@@ -284,3 +284,55 @@ type TupleToObject<T extends readonly PropertyKey[]> = { [K in T[number]]: K };
    ```
 
 In summary, `PromiseLike` is a TypeScript interface that defines the shape of objects representing promises or promise-like behavior. It enables TypeScript to work with a wider range of asynchronous patterns and enhances the interoperability of TypeScript code with various libraries and APIs.
+
+
+---
+
+### Concat (JS `Array.concat` )
+
+1. `type Concat<A extends readonly unknown[], B extends readonly unknown[]>`: This defines a generic type `Concat` that takes two type parameters `A` and `B`, which are arrays of unknown readonly elements.
+
+2. `([...A, ...B])`: This uses the spread operator (`...`) to concatenate the elements of array `A` followed by the elements of array `B`. The resulting array contains all the elements from `A` followed by all the elements from `B`.
+
+Now, let's understand how this works with an example:
+
+```typescript
+type Result = Concat<[1], [2]>; // Expected to be [1, 2]
+```
+
+When we pass `[1]` as `A` and `[2]` as `B`, the `Concat` type concatenates the elements of `A` and `B`:
+
+- `A` is `[1]`, so `[...A]` becomes `[1]`.
+- `B` is `[2]`, so `[...B]` becomes `[2]`.
+- `[...A, ...B]` combines `[1]` and `[2]`, resulting in `[1, 2]`.
+
+So, the `Result` type evaluates to `[1, 2]`, as expected.
+
+This implementation effectively replicates the behavior of JavaScript's `Array.concat` function in the TypeScript type system by concatenating two arrays in left-to-right order.
+
+Detailed Explanation 
+
+In the type constraint `A extends readonly unknown[]`, the `unknown` type is used to represent a value whose type is not known at compile time. Here's a breakdown of what each part of the constraint means:
+
+- **`A`**: This is a type parameter representing the type that is being constrained. It can be any type, but it must adhere to the constraint specified.
+
+- **`extends`**: In the context of type constraints, `extends` is used to enforce that the type `A` must conform to a certain shape or structure.
+
+- **`readonly`**: This keyword specifies that the array type `A` must be readonly, meaning that its elements cannot be modified after initialization.
+
+- **`unknown[]`**: This denotes an array whose element types are all of type `unknown`. In other words, `A` must be an array where each element's type is unknown.
+
+Putting it all together, `A extends readonly unknown[]` ensures that the type `A` is an array (readonly) whose elements are of unknown type. This constraint allows for flexibility in the type of array `A`, as it can hold values of any type without revealing their specific types.
+
+For example:
+```typescript
+type ExampleArray = readonly unknown[]; // Valid type that adheres to the constraint
+
+const arr1: ExampleArray = [1, 'two', true]; // Valid, elements can be of any type
+const arr2: ExampleArray = ['hello', 42]; // Also valid
+const arr3: ExampleArray = []; // Valid, can be an empty array
+```
+
+This constraint provides versatility in dealing with arrays of uncertain element types, allowing for greater flexibility while maintaining type safety.
+
+--- 
