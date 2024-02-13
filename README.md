@@ -39,7 +39,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
    userInput = 'hello'; // valid
    ```
 
-### Type Checking and Narrowing `unknown`:
+#### Type Checking and Narrowing `unknown`:
 
 1. **Type Checking**: Since the type of an `unknown` variable is not known, TypeScript won't allow you to perform most operations on it without narrowing its type first. This ensures type safety.
 
@@ -73,13 +73,45 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
      }
      ```
 
-### Differences from `any`:
+#### Differences from `any`:
 
 1. **Type Safety**: `unknown` provides more type safety compared to `any`. While `any` allows unrestricted operations, `unknown` requires type checking before performing operations, reducing the risk of runtime errors.
 
 2. **Type Inference**: Variables of type `unknown` retain their type information. Unlike `any`, where TypeScript gives up type checking, `unknown` variables still undergo type inference and are checked for type compatibility.
 
 Overall, `unknown` is a useful tool for working with values of uncertain type while maintaining type safety in TypeScript.
+
+**Let's understand the concept of type inference and how it applies to variables of type `unknown` with examples:**
+
+Type inference is the TypeScript compiler's ability to deduce the types of variables based on their usage within the code. When you declare a variable without explicitly specifying its type, TypeScript tries to infer the most appropriate type based on the value assigned to it and how that value is used.
+
+Now, let's see how type inference works with variables of type `unknown`:
+
+```typescript
+let myVar = 10; // TypeScript infers the type of myVar as number
+```
+
+In this example, TypeScript infers the type of `myVar` as `number` because its initial value is `10`, which is a numeric literal.
+
+Now, let's see how type inference works with variables of type `unknown`:
+
+```typescript
+let myUnknownVar: unknown = 'Hello'; // The type of myUnknownVar is explicitly set to unknown
+let myString: string = myUnknownVar; // Error: Type 'unknown' is not assignable to type 'string'
+```
+
+In this example, `myUnknownVar` is explicitly declared as type `unknown`. Even though it's assigned a value of type `string`, TypeScript doesn't automatically infer its type as `string`. When you try to assign `myUnknownVar` to a variable of type `string` (`myString`), TypeScript throws a compilation error because it's not safe to assume that `myUnknownVar` will always hold a value of type `string`.
+
+Now, let's contrast this with the behavior of variables of type `any`:
+
+```typescript
+let myAnyVar: any = 'Hello'; // The type of myAnyVar is explicitly set to any
+let myString: string = myAnyVar; // No error
+```
+
+In this example, `myAnyVar` is explicitly declared as type `any`. TypeScript allows you to assign it to a variable of type `string` (`myString`) without any compilation errors. Unlike `unknown`, where TypeScript retains type information and enforces type checking, with `any`, TypeScript essentially disables type checking and treats the variable as having the type of "anything", allowing assignments without type checks.
+
+In summary, while both `unknown` and `any` are types that represent "anything", TypeScript treats them differently during type inference and type checking. `unknown` maintains type information and enforces type safety, while `any` bypasses type checking altogether.
 
 ---
 
