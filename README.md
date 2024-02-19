@@ -24,7 +24,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [Readonly](#readonly)
 * [PromiseLike](#promiselike)
 * [Concat](#concat-js-arrayconcat-)
-* [Push](#push)
+* [Push](#push-js-arraypush-)
 
 ---
 
@@ -434,7 +434,7 @@ Certainly! Here's the explanation in a README file format:
 
  ### Push (JS `Array.push` )
 
-## Overview
+**Overview**
 
 In TypeScript, we often need to work with arrays and manipulate their contents. One common operation is to add elements to an array. While TypeScript provides the `push` method for this purpose, we might want to create a generic version of `push` to ensure type safety.
 
