@@ -24,6 +24,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [Readonly](#readonly)
 * [PromiseLike](#promiselike)
 * [Concat](#concat-js-arrayconcat-)
+* [Push](#push)
 
 ---
 
@@ -424,5 +425,48 @@ const arr3: ExampleArray = []; // Valid, can be an empty array
 ```
 
 This constraint provides versatility in dealing with arrays of uncertain element types, allowing for greater flexibility while maintaining type safety.
+
+--- 
+
+Certainly! Here's the explanation in a README file format:
+
+---
+
+ ### Push (JS `Array.push` )
+
+## Overview
+
+In TypeScript, we often need to work with arrays and manipulate their contents. One common operation is to add elements to an array. While TypeScript provides the `push` method for this purpose, we might want to create a generic version of `push` to ensure type safety.
+
+**Implementation**
+
+To implement a generic version of `Array.push`, we use tuple types and conditional types in TypeScript.
+
+**Approach**
+
+We define a type named `Push` that takes two type parameters: `T` for the input array and `E` for the type of the element to be pushed onto the array.
+
+```typescript
+type Push<T extends any[], E> = [...T, E];
+```
+
+In this implementation:
+- `T` represents the input array, which must be a tuple type (`T extends any[]`).
+- `E` represents the type of the element to be pushed onto the array.
+- `[...T, E]` uses the spread operator (`...`) to create a new tuple that includes all elements of the original array `T`, followed by the new element `E`.
+
+**Example**
+
+Here's how you can use the `Push` type:
+
+```typescript
+type Result = Push<[1, 2], '3'>; // Result: [1, 2, '3']
+```
+
+This implementation correctly appends the new element `'3'` to the end of the input array `[1, 2]`, resulting in `[1, 2, '3']`.
+
+**Conclusion**
+
+Creating a generic version of `Array.push` allows us to maintain type safety while manipulating arrays in TypeScript. By leveraging tuple types and conditional types, we can achieve this functionality in a flexible and type-safe manner.
 
 --- 
