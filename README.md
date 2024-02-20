@@ -470,3 +470,24 @@ This implementation correctly appends the new element `'3'` to the end of the in
 Creating a generic version of `Array.push` allows us to maintain type safety while manipulating arrays in TypeScript. By leveraging tuple types and conditional types, we can achieve this functionality in a flexible and type-safe manner.
 
 --- 
+
+### UnShift (JS `Array.unshift` )
+
+To implement the type version of `Array.unshift` in TypeScript, we can leverage tuple types and conditional types. Here's how we can do it:
+
+```typescript
+type Unshift<T extends any[], E> = [E, ...T];
+```
+
+Explanation:
+- We define a type named `Unshift` that takes two type parameters: `T` for the input array and `E` for the type of the element to be added to the beginning of the array.
+- Using the spread operator (`...`), we prepend the new element `E` to the tuple `T`, creating a new tuple.
+
+Example:
+```typescript
+type Result = Unshift<[1, 2], 0>; // Result: [0, 1, 2]
+```
+
+This implementation correctly adds the new element `0` to the beginning of the input array `[1, 2]`, resulting in `[0, 1, 2]`.
+
+---
