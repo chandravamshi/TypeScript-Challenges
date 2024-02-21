@@ -26,6 +26,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [Concat](#concat-js-arrayconcat-)
 * [Push](#push-js-arraypush-)
 * [UnShift](#unshift-js-arrayunshift-)
+* [Parameters](#parameters)
 
 ---
 
