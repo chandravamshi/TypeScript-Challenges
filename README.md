@@ -492,3 +492,28 @@ type Result = Unshift<[1, 2], 0>; // Result: [0, 1, 2]
 This implementation correctly adds the new element `0` to the beginning of the input array `[1, 2]`, resulting in `[0, 1, 2]`.
 
 ---
+### Parameters
+
+To implement the `Parameters` utility type without using it directly, we can leverage TypeScript's inference capabilities and conditional types. Here's how we can do it:
+
+```typescript
+type MyParameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never;
+```
+
+Explanation:
+- We define a type named `MyParameters` that takes a generic function type `T`.
+- We use a conditional type to check if `T` is assignable to a function type `(args: infer P) => any`, where `P` represents the tuple of function parameters.
+- If `T` is indeed a function type, we return `P`, which represents the tuple of function parameters.
+- If `T` is not a function type, we return `never`.
+
+Example:
+```typescript
+const foo = (arg1: string, arg2: number): void => {}
+
+type FunctionParamsType = MyParameters<typeof foo>; // [arg1: string, arg2: number]
+```
+
+In this example, `MyParameters<typeof foo>` correctly evaluates to `[arg1: string, arg2: number]`, which represents the parameters of the `foo` function.
+
+
+---
