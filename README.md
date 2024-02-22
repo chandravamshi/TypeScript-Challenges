@@ -27,6 +27,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [Push](#push-js-arraypush-)
 * [UnShift](#unshift-js-arrayunshift-)
 * [Parameters](#parameters)
+* [Pick](#pick)
 
 ---
 
@@ -515,6 +516,46 @@ type FunctionParamsType = MyParameters<typeof foo>; // [arg1: string, arg2: numb
 ```
 
 In this example, `MyParameters<typeof foo>` correctly evaluates to `[arg1: string, arg2: number]`, which represents the parameters of the `foo` function.
+
+---
+### Pick (The `Pick` builtin)
+
+The `Pick` utility type in TypeScript is used to select a subset of properties from an existing type. It takes two type parameters: the first parameter `T` is the type from which you want to pick properties, and the second parameter `K` is a union type of keys (property names) that you want to include in the new type.
+
+Own version of `Pick`, called `MyPick`:
+
+```typescript
+type MyPick<T, K extends keyof T> = {
+  [P in K]: T[P];
+};
+```
+
+Let's break down the implementation:
+
+- `T` represents the original type from which you want to pick properties.
+- `K extends keyof T` ensures that the type `K` is a union of keys that exist in `T`.
+- `[P in K]` iterates over each key in the union type `K`.
+- `T[P]` selects the type of the property with key `P` from the original type `T`.
+
+Here's an example of how you can use `MyPick`:
+
+```typescript
+interface Person {
+  name: string;
+  age: number;
+  address: string;
+}
+
+type PersonNameAndAge = MyPick<Person, 'name' | 'age'>;
+
+// The type of PersonNameAndAge is:
+// {
+//   name: string;
+//   age: number;
+// }
+```
+
+In this example, `MyPick<Person, 'name' | 'age'>` selects only the `name` and `age` properties from the `Person` type, resulting in a new type containing only those properties.
 
 
 ---
