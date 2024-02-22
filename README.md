@@ -27,7 +27,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [Push](#push-js-arraypush-)
 * [UnShift](#unshift-js-arrayunshift-)
 * [Parameters](#parameters)
-* [Pick](#pick)
+* [Pick](#pick-the-pick-builtin)
 
 ---
 
