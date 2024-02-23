@@ -28,7 +28,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [UnShift](#unshift-js-arrayunshift-)
 * [Parameters](#parameters)
 * [Pick](#pick-the-pick-builtin)
-* ReturnType(#)
+* ReturnType(#returntype-the-returntype-builtin)
 
 ---
 
