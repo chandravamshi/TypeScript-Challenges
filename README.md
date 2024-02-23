@@ -28,6 +28,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [UnShift](#unshift-js-arrayunshift-)
 * [Parameters](#parameters)
 * [Pick](#pick-the-pick-builtin)
+* ReturnType(#)
 
 ---
 
@@ -557,5 +558,30 @@ type PersonNameAndAge = MyPick<Person, 'name' | 'age'>;
 
 In this example, `MyPick<Person, 'name' | 'age'>` selects only the `name` and `age` properties from the `Person` type, resulting in a new type containing only those properties.
 
+---
+### ReturnType (The `ReturnType` builtin)
+
+To implement the `ReturnType` generic type without using the built-in `ReturnType` utility, you can extract the return type of a function by inferring the return type based on the function's signature. Here's how you can do it:
+
+```typescript
+type MyReturnType<T extends (...args: any[]) => any> = T extends (...args: any[]) => infer R ? R : never;
+
+// Test example
+const fn = (v: boolean) => {
+  if (v) {
+    return 1;
+  } else {
+    return 2;
+  }
+};
+
+type a = MyReturnType<typeof fn>; // should be "1 | 2"
+```
+
+Explanation:
+- `MyReturnType` is a generic type that takes a function type `T`.
+- `T extends (...args: any[]) => infer R` checks if `T` is a function type. If it is, `infer R` extracts the return type of the function and assigns it to `R`.
+- `? R : never` ensures that if `T` is not a function type, the result is `never`.
+- In the test example, `fn` is a function that returns either `1` or `2`. `MyReturnType<typeof fn>` extracts this return type as `"1 | 2"`.
 
 ---
