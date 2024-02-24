@@ -29,7 +29,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [Parameters](#parameters)
 * [Pick](#pick-the-pick-builtin)
 * [ReturnType](#returntype-the-returntype-builtin)
-* [Omit](#omit)
+* [Omit](#omit-the-omit-builtin)
 
 ---
 
