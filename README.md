@@ -29,6 +29,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [Parameters](#parameters)
 * [Pick](#pick-the-pick-builtin)
 * [ReturnType](#returntype-the-returntype-builtin)
+* [Omit](#omit)
 
 ---
 
@@ -584,4 +585,36 @@ Explanation:
 - `? R : never` ensures that if `T` is not a function type, the result is `never`.
 - In the test example, `fn` is a function that returns either `1` or `2`. `MyReturnType<typeof fn>` extracts this return type as `"1 | 2"`.
 
+---
+
+### Omit (The `Omit` builtin)
+
+To implement the `Omit<T, K>` generic type without using the built-in `Omit` utility, you can manually construct a new type by picking all properties from `T` except those specified by `K`. Here's how you can do it:
+
+```typescript
+type MyOmit<T, K extends keyof T> = {
+  [P in keyof T as P extends K ? never : P]: T[P];
+};
+
+// Test example
+interface Todo {
+  title: string;
+  description: string;
+  completed: boolean;
+}
+
+type TodoPreview = MyOmit<Todo, 'description' | 'title'>;
+
+const todo: TodoPreview = {
+  completed: false,
+};
+```
+
+Explanation:
+- `MyOmit<T, K>` is a generic type that takes two type parameters: `T` and `K`.
+- `[P in keyof T as P extends K ? never : P]` iterates over each property `P` in `T`.
+- For each property `P`, it checks if `P` extends any key in `K`.
+- If `P` extends any key in `K`, it assigns `never` to exclude that property from the new type.
+- Otherwise, it keeps the property as it is.
+- This effectively creates a new type by omitting the properties specified by `K` from the original type `T`.
 ---
