@@ -618,3 +618,71 @@ Explanation:
 - Otherwise, it keeps the property as it is.
 - This effectively creates a new type by omitting the properties specified by `K` from the original type `T`.
 ---
+
+### ReadOnly 
+
+```markdown
+# MyReadonly2<T, K>
+
+This generic type takes two type arguments `T` and `K`, where:
+- `T`: Represents the type of the object whose properties we want to make readonly.
+- `K`: (Optional) Specifies the subset of properties of `T` that should be set to readonly. Defaults to all properties of `T`.
+
+## Implementation
+
+```typescript
+type MyReadonly2<T, K extends keyof T = keyof T> = 
+  { readonly [P in K]: T[P] } & 
+  { [P in keyof T as P extends K ? never : P]: T[P] };
+```
+**Explanation**
+
+1. **Type Parameters:**
+   - `T`: Represents the type of the object whose properties we want to make readonly.
+   - `K`: Represents the subset of properties of `T` that should be set to readonly. It's optional and defaults to all properties of `T` (`keyof T`).
+
+2. **Mapped Type for Readonly Properties (`K` subset):**
+   - `{ readonly [P in K]: T[P] }`: This mapped type iterates over each property `P` in the subset `K` of `T` and makes them readonly by adding the `readonly` modifier. It ensures that only the specified properties in `K` are readonly.
+
+3. **Mapped Type for Non-Readonly Properties (`T` minus `K`):**
+   - `[P in keyof T as P extends K ? never : P]: T[P]`: This mapped type iterates over all properties `P` of `T`. For each property `P`, it checks if `P` exists in the subset `K`. If yes, it evaluates to `never`, effectively removing that property from the resulting type. If not, it evaluates to `P`, keeping the property as-is with its original type.
+
+4. **Intersection of Mapped Types:**
+   - `&`: Combines the mapped types created in steps 2 and 3 into a single type. This ensures that the resulting type contains both the readonly properties specified in `K` and the non-readonly properties from `T` that are not in `K`.
+
+Putting it all together, the implementation ensures that the properties specified in `K` are readonly, while the rest of the properties of `T` remain unchanged.
+
+---
+
+### DeepReadOnly 
+
+```markdown
+# DeepReadonly<T>
+
+This generic type makes every parameter of an object `T`, including its sub-objects, readonly.
+
+## Implementation
+
+```typescript
+type DeepReadonly<T> = {
+  readonly [K in keyof T]: T[K] extends Function
+    ? T[K]
+    : T[K] extends object
+    ? DeepReadonly<T[K]>
+    : T[K];
+};
+```
+**Explanation**
+1. **Type Parameter:**
+   - `T`: Represents the type of the object whose parameters we want to make readonly.
+
+2. **Mapped Type for Readonly Properties:**
+   - `readonly [K in keyof T]`: This mapped type iterates over each property `K` in `T` and makes them readonly by adding the `readonly` modifier.
+
+3. **Conditional Type:**
+   - `T[K] extends Function ? T[K] : T[K] extends object ? DeepReadonly<T[K]> : T[K]`: This conditional type checks the type of each property `T[K]`:
+     - If `T[K]` is a function, it returns `T[K]` itself because functions do not have properties to make readonly.
+     - If `T[K]` is an object, it recursively applies the `DeepReadonly` type to make its properties readonly.
+     - If `T[K]` is neither a function nor an object, it keeps `T[K]` as-is.
+
+---
