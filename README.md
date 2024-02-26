@@ -30,6 +30,9 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [Pick](#pick-the-pick-builtin)
 * [ReturnType](#returntype-the-returntype-builtin)
 * [Omit](#omit-the-omit-builtin)
+* [ReadOnly](#readonly-1)
+* [DeepReadOnly](#deepreadonly)
+* 
 
 ---
 
