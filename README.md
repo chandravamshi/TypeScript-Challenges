@@ -689,3 +689,57 @@ type DeepReadonly<T> = {
      - If `T[K]` is neither a function nor an object, it keeps `T[K]` as-is.
 
 ---
+
+### Tuple to Union
+
+`TupleToUnion<T>`:
+
+```typescript
+type TupleToUnion<T extends any[]> = T[number];
+```
+
+Explanation:
+- `T extends any[]`: Ensures that the input type `T` is a tuple.
+- `T[number]`: Accesses the union type of all elements in the tuple `T`.
+
+This works because `T[number]` will give us the union of all element types in the tuple `T`.
+
+Example usage:
+
+```typescript
+type Arr = ['1', '2', '3'];
+
+type Test = TupleToUnion<Arr>; // expected to be '1' | '2' | '3'
+```
+
+In this example, `TupleToUnion<Arr>` resolves to the union type `'1' | '2' | '3'`, which is the union of all the values in the tuple `Arr`.
+
+Let's break down how `T[number]` accesses the union type of all elements in the tuple `T`:
+
+1. **`T[number]`**: This syntax accesses the type of an element in the tuple `T` by indexing it with a numeric literal type. In TypeScript, when you use numeric literal types to index an array or tuple type, TypeScript returns the type of the indexed element.
+
+2. **Union of Element Types**: When you use `T[number]`, TypeScript infers the type of each element in the tuple `T` individually. Since each element in the tuple can have a different type, TypeScript combines these types into a union type.
+
+Here's a step-by-step example to illustrate this process:
+
+Consider a tuple type `T` with the elements `'1'`, `'2'`, and `'3'`:
+
+```typescript
+type T = ['1', '2', '3'];
+```
+
+When we use `T[number]`, TypeScript internally accesses the type of each element in the tuple `T`:
+
+- `T[0]`: Type of the first element `'1'` is `'1'`.
+- `T[1]`: Type of the second element `'2'` is `'2'`.
+- `T[2]`: Type of the third element `'3'` is `'3'`.
+
+Now, TypeScript combines these types into a union:
+
+```typescript
+type UnionType = T[number]; // Equivalent to type UnionType = '1' | '2' | '3';
+```
+
+So, `T[number]` effectively gives us the union type of all elements in the tuple `T`.
+
+---
