@@ -744,3 +744,93 @@ type UnionType = T[number]; // Equivalent to type UnionType = '1' | '2' | '3';
 So, `T[number]` effectively gives us the union type of all elements in the tuple `T`.
 
 ---
+
+### Chainable Options
+
+We need to type an object or a class to provide two functions: `option(key, value)` and `get()`. The `option` function extends the current configuration type by the given key and value, and the `get` function retrieves the final result.
+
+Example
+
+```typescript
+declare const config: Chainable;
+
+const result = config
+  .option('foo', 123)
+  .option('name', 'type-challenges')
+  .option('bar', { value: 'Hello World' })
+  .get();
+
+// The expected type of result is:
+interface Result {
+  foo: number;
+  name: string;
+  bar: {
+    value: string;
+  };
+}
+```
+
+Solution
+
+```typescript
+type Chainable<T = {}> = {
+  option<K extends string, V>(
+    key: Exclude<K, keyof T>,
+    value: V
+  ): Chainable<Omit<T, K> & Record<K, V>>;
+  get(): T;
+};
+```
+Explanation
+
+The `Chainable` type is designed to provide a chainable interface for configuring objects. It consists of two main functions:
+
+1. `option(key, value)`: This function allows adding or updating key-value pairs in the configuration object.
+2. `get()`: This function retrieves the final configuration object.
+
+Detailed Explanation
+
+- **`option` function**:
+  - It takes two parameters: `key` (the name of the property to be added or updated) and `value` (the value to be assigned to the property).
+  - The `key` parameter is constrained to be a string (`K extends string`) to ensure type safety.
+  - The `value` parameter can have any type (`V`).
+  - The `Exclude<K, keyof T>` type is used to ensure that the `key` does not already exist in the configuration object (`T`). This prevents accidental overwriting of existing properties.
+  - Inside the function body, the `Omit<T, K> & Record<K, V>` type is used to create a new configuration object:
+    - `Omit<T, K>` removes the `key` property (if it exists) from the current configuration object (`T`).
+    - `Record<K, V>` adds the `key` property with the specified `value` to the new configuration object.
+  - The function returns a new `Chainable` object with the updated configuration.
+
+- **`get` function**:
+  - It takes no parameters.
+  - It retrieves the final configuration object (`T`) after all option calls.
+  - The function returns the final configuration object.
+
+Example
+
+```typescript
+// Declaring a Chainable object
+declare const config: Chainable;
+
+// Calling option() and get() functions to configure and retrieve the final result
+const result1 = config
+  .option('foo', 123)
+  .option('bar', { value: 'Hello World' })
+  .option('name', 'type-challenges')
+  .get();
+
+// The expected type of result1 is:
+// interface Result1 {
+//   foo: number;
+//   bar: {
+//     value: string;
+//   };
+//   name: string;
+// }
+```
+
+In this example, the `config` object is used to configure a hypothetical object. Each call to the `option` function adds or updates properties in the configuration object. Finally, the `get` function retrieves the final configuration object (`result1`). The resulting object `result1` should have properties `foo`, `bar`, and `name` with the specified values.
+
+This demonstrates how the `Chainable` type enables a chainable configuration pattern in TypeScript, ensuring type safety and ease of use.
+
+---
+
