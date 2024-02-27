@@ -33,6 +33,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [ReadOnly](#readonly-1)
 * [DeepReadOnly](#deepreadonly)
 * [Tuple to Union](#tuple-to-union)
+* [Chainable Options](#chainable-options)
 
 
 ---
