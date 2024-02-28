@@ -34,6 +34,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [DeepReadOnly](#deepreadonly)
 * [Tuple to Union](#tuple-to-union)
 * [Chainable Options](#chainable-options)
+* [Last of Array](#last-of-array)
 
 
 ---
@@ -834,4 +835,47 @@ In this example, the `config` object is used to configure a hypothetical object.
 This demonstrates how the `Chainable` type enables a chainable configuration pattern in TypeScript, ensuring type safety and ease of use.
 
 ---
+
+### Last of Array
+
+Problem
+
+Create a generic type `Last<T>` that takes an array type `T` and returns its last element.
+
+Example
+
+```typescript
+type arr1 = ['a', 'b', 'c']
+type arr2 = [3, 2, 1]
+
+type tail1 = Last<arr1> // expected to be 'c'
+type tail2 = Last<arr2> // expected to be 1
+```
+
+Solution
+
+We can use conditional types and inference to achieve this. The type `Last<T>` checks if the array type `T` matches a pattern where the last element is captured by `infer LastElement`. If the pattern matches, it returns `LastElement`; otherwise, it returns `never`.
+
+```typescript
+type Last<T extends any[]> = T extends [...infer _, infer LastElement] ? LastElement : never;
+```
+
+- `T extends any[]`: This constrains `T` to be an array type.
+- `[...infer _, infer LastElement]`: This pattern matches an array type where the last element is captured by `LastElement`, and the rest of the elements (excluding the last) are captured by `infer _`.
+- `? LastElement : never`: If the pattern matches successfully, it returns the last element `LastElement`. Otherwise, it returns `never`.
+
+Usage
+
+```typescript
+type arr1 = ['a', 'b', 'c']
+type arr2 = [3, 2, 1]
+
+type tail1 = Last<arr1> // evaluates to 'c'
+type tail2 = Last<arr2> // evaluates to 1
+```
+
+This solution provides a generic type `Last<T>` that accurately determines the last element of an array type `T`.
+
+--- 
+
 
