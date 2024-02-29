@@ -877,6 +877,8 @@ type tail2 = Last<arr2> // evaluates to 1
 
 This solution provides a generic type `Last<T>` that accurately determines the last element of an array type `T`.
 
+[Top](#concepts)
+
 --- 
 
 ### Pop 
@@ -910,5 +912,7 @@ Explanation:
 - We return `Rest`, which contains all elements of `T` except the last one.
 - If `T` is empty or not an array, the conditional type fallback returns `T` as is.
 
-[Top](#concepts)
+
+ [Top](#concepts)
+
 ---
