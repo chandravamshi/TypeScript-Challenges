@@ -35,6 +35,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [Tuple to Union](#tuple-to-union)
 * [Chainable Options](#chainable-options)
 * [Last of Array](#last-of-array)
+* [Except Last of Array](#pop)
 
 
 ---
@@ -878,4 +879,36 @@ This solution provides a generic type `Last<T>` that accurately determines the l
 
 --- 
 
+### Pop 
 
+Problem
+
+Implement a generic `Pop<T>` that takes an Array `T` and returns an Array without it's last element.
+
+```typescript
+// Example usage:
+type arr1 = ['a', 'b', 'c', 'd'];
+type arr2 = [3, 2, 1];
+
+type re1 = Pop<arr1>; // expected to be ['a', 'b', 'c']
+type re2 = Pop<arr2>; // expected to be [3, 2]
+```
+Solution
+
+```typescript
+type Pop<T extends unknown[]> =  T extends readonly [...infer Rest, infer Last]  ? Rest : T;
+    // Check if T extends an array-like structure with at least one element
+    // If so, return the array without its last element
+    // If T is empty or not an array, return T as is
+    
+```
+
+Explanation:
+- The `Pop<T>` type takes a generic type parameter `T`, which is expected to be an array or a tuple.
+- We use a conditional type to check if `T` extends an array-like structure with at least one element.
+- If `T` matches this pattern, meaning it has at least one element, we use tuple spreading (`[...infer Rest, infer Last]`) to destructure `T` into two parts: `Rest`, which represents all elements except the last one, and `Last`, which represents the last element.
+- We return `Rest`, which contains all elements of `T` except the last one.
+- If `T` is empty or not an array, the conditional type fallback returns `T` as is.
+
+
+---
