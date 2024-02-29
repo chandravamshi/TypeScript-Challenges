@@ -910,5 +910,5 @@ Explanation:
 - We return `Rest`, which contains all elements of `T` except the last one.
 - If `T` is empty or not an array, the conditional type fallback returns `T` as is.
 
-
+[Top](#concepts)
 ---
