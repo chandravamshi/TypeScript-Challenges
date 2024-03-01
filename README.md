@@ -36,6 +36,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [Chainable Options](#chainable-options)
 * [Last of Array](#last-of-array)
 * [Except Last of Array](#pop)
+* [PromiseAll Function](#promiseAll-function)
 
 
 ---
