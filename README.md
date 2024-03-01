@@ -916,3 +916,71 @@ Explanation:
  [Top](#concepts)
 
 ---
+
+### PromiseAll Function
+
+Type the function `PromiseAll` that accepts an array of `PromiseLike` objects, returning a promise that resolves to an array with the resolved values of the input promises.
+
+Example
+
+```typescript
+const promise1 = Promise.resolve(3);
+const promise2 = 42;
+const promise3 = new Promise<string>((resolve, reject) => {
+  setTimeout(resolve, 100, 'foo');
+});
+
+// Expected: Promise<[number, 42, string]>
+const p = PromiseAll([promise1, promise2, promise3] as const);
+```
+
+Solution
+
+```typescript
+// Define a conditional type to unwrap promises
+type MyAwaited<T> = T extends PromiseLike<infer R> ? R : T;
+
+// Declare the PromiseAll function
+declare function PromiseAll<T extends unknown[]>(
+  values: readonly [...T]
+): Promise<{ [K in keyof T]: MyAwaited<T[K]> }>;
+```
+
+Explanation
+
+1. **MyAwaited Conditional Type**: We define a conditional type `MyAwaited<T>` that checks if the type `T` extends `PromiseLike<infer R>`. If so, it resolves to `R`, otherwise, it resolves to `T`.
+
+2. **PromiseAll Function**: We declare the `PromiseAll` function that accepts an array of unknown types `T` as its argument. We use TypeScript's variadic tuple types to enforce that the input array remains immutable (`readonly`). Inside the function, we map over each element of the input array using a mapped type to unwrap promises using the `MyAwaited` conditional type.
+
+This ensures that the resulting promise resolves to an array containing the resolved values of the input promises.
+
+1. **Define `MyAwaited` Conditional Type**:
+   ```typescript
+   type MyAwaited<T> = T extends PromiseLike<infer R> ? R : T;
+   ```
+   - This line declares a conditional type named `MyAwaited`.
+   - It takes a type `T` as input.
+   - The conditional checks if `T` extends `PromiseLike<infer R>`, where `infer R` represents the type contained within the promise.
+   - If `T` extends `PromiseLike`, it resolves to `R`, which is the type inside the promise.
+   - If `T` does not extend `PromiseLike`, it resolves to `T` itself.
+
+2. **Declare `PromiseAll` Function**:
+   ```typescript
+   declare function PromiseAll<T extends unknown[]>(
+     values: readonly [...T]
+   ): Promise<{ [K in keyof T]: MyAwaited<T[K]> }>;
+   ```
+   - This line declares the `PromiseAll` function.
+   - It accepts an array of unknown types `T` as its argument.
+   - The `T` type is constrained to be a tuple using TypeScript's variadic tuple syntax (`T extends unknown[]`).
+   - The `values` parameter is marked as `readonly` to ensure immutability of the input array.
+   - Inside the function signature, a mapped type is used to iterate over each element of the input array.
+   - For each element `T[K]`, the `MyAwaited` conditional type is applied to unwrap any promises contained within.
+   - The resulting type is a tuple where each element's type is replaced with its unwrapped type using `MyAwaited`.
+
+Overall, this code defines a conditional type `MyAwaited` to unwrap promises, and declares a `PromiseAll` function that accepts an array of unknown types and returns a promise resolving to an array with the resolved values of the input promises, unwrapping them if necessary.
+
+[Top](#concepts)
+
+--- 
+
