@@ -37,6 +37,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [Last of Array](#last-of-array)
 * [Except Last of Array](#pop)
 * [PromiseAll Function](#promiseAll-function)
+* [Type Lookup](#type-lookup)
 
 
 ---
@@ -985,3 +986,54 @@ Overall, this code defines a conditional type `MyAwaited` to unwrap promises, an
 
 --- 
 
+### Type Lookup
+
+we would like to get the corresponding type by searching for the common type field in the union `Cat | Dog`. In other words, we will expect to get `Dog` for `LookUp<Dog | Cat, 'dog'>` and `Cat` for `LookUp<Dog | Cat, 'cat'>` in the following example.
+
+```typescript
+interface Cat {
+  type: 'cat'
+  breeds: 'Abyssinian' | 'Shorthair' | 'Curl' | 'Bengal'
+}
+
+interface Dog {
+  type: 'dog'
+  breeds: 'Hound' | 'Brittany' | 'Bulldog' | 'Boxer'
+  color: 'brown' | 'white' | 'black'
+}
+
+type MyDogType = LookUp<Cat | Dog, 'dog'> // expected to be `Dog`
+```
+
+Solution:
+
+1. **Define the `LookUp` type**:
+   ```typescript
+   type LookUp<U, T> = U extends { type: T } ? U : never;
+   ```
+   - Here, `LookUp` is a conditional type that takes two type parameters:
+     - `U`: The union type we want to search in.
+     - `T`: The type string we want to look up.
+
+2. **Conditional Check**:
+   ```typescript
+   U extends { type: T } ? U : never;
+   ```
+   - This conditional type checks if each member of the union type `U` extends an object type with a `type` property equal to `T`.
+   - If the condition is true, meaning if the member has a `type` property equal to `T`, it returns the member type `U`.
+   - If the condition is false, meaning if the member does not have a `type` property equal to `T`, it returns `never`.
+
+3. **Application**:
+   ```typescript
+   type MyDogType = LookUp<Cat | Dog, 'dog'>;
+   ```
+   - Here, `Cat | Dog` is our union type `U`, which consists of `Cat` and `Dog`.
+   - We are looking up the type corresponding to the type string `'dog'`.
+   - When we pass `Cat | Dog` to `LookUp`, it iterates over each member of the union and checks if it has a `type` property equal to `'dog'`.
+   - In this case, only the `Dog` type has a `type` property equal to `'dog'`, so `LookUp` returns `Dog`.
+
+In summary, the `LookUp` type allows us to find the type in a union based on a specified attribute value. It iterates over the union type, checks each member for a matching attribute value, and returns the corresponding member type if found.
+
+[Top](#concepts)
+
+---
