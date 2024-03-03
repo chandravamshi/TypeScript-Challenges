@@ -38,6 +38,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [Except Last of Array](#pop)
 * [PromiseAll Function](#promiseAll-function)
 * [Type Lookup](#type-lookup)
+* [Trim Left](#trim-eft)
 
 
 ---
@@ -1035,5 +1036,49 @@ Solution:
 In summary, the `LookUp` type allows us to find the type in a union based on a specified attribute value. It iterates over the union type, checks each member for a matching attribute value, and returns the corresponding member type if found.
 
 [Top](#concepts)
+
+---
+
+### Trim Left
+
+Implement `TrimLeft<T>` which takes an exact string type and returns a new string with the whitespace beginning removed.
+
+```typescript
+type trimed = TrimLeft<'  Hello World  '> // expected to be 'Hello World  '
+```
+
+Solution:
+
+```typescript
+type TrimLeft<S extends string> = S extends `${infer L}${infer R}` ?
+  L extends ' ' | '\n' | '\t' ?
+    TrimLeft<R> : `${L}${R}` : S;
+```
+
+Explanation:
+
+1. **Template Literal Types**: 
+   - We use template literal types to destructure the input string `S` into two parts: the first character `L` and the rest of the string `R`.
+
+2. **Conditional Check for Whitespace**:
+   - We check if the first character `L` is a space `' '`, newline `'\n'`, or tab `'\t'`.
+   - If `L` is a whitespace character, we recursively call `TrimLeft<R>` to continue trimming the string.
+   - If `L` is not a whitespace character, we concatenate it with the rest of the string `R` to preserve the non-whitespace characters.
+
+3. **Base Case**:
+   - If the input string `S` is empty or does not contain leading whitespace, we return `S` as is.
+
+Example:
+
+```typescript
+type trimed = TrimLeft<'  Hello World  '> 
+// Expected: 'Hello World  '
+```
+
+- For the input string `'  Hello World  '`, the leading whitespace characters are removed, resulting in `'Hello World  '`.
+- The expected output matches the behavior of the `TrimLeft` type, as the leading whitespace is correctly removed from the input string.
+
+[Top](#concepts)
+
 
 ---
