@@ -38,7 +38,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [Except Last of Array](#pop)
 * [PromiseAll Function](#promiseAll-function)
 * [Type Lookup](#type-lookup)
-* [Trim Left](#trim-eft)
+* [Trim Left](#trim-left)
 
 
 ---
