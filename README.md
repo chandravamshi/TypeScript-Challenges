@@ -16,6 +16,28 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 
 
 ## Concepts
+| | |
+|-------------|--------------|
+| [Unknown](#unknown) | [Pick](#pick-the-pick-builtin) |
+| [If](#if) | [ReturnType](#returntype-the-returntype-builtin) |
+| [Exclude](#exclude) | [Omit](#omit-the-omit-builtin) |
+| [Tuple Vs Array](#tuple-vs-array) | [ReadOnly](#readonly-1) |
+| [First of Array](#first-of-array) | [DeepReadOnly](#deepreadonly) |
+| [Readonly](#readonly) | [Tuple to Union](#tuple-to-union) |
+| [PromiseLike](#promiselike) | [Chainable Options](#chainable-options) |
+| [Concat](#concat-js-arrayconcat-) | [Last of Array](#last-of-array) |
+| [Push](#push-js-arraypush-) | [Except Last of Array](#pop) |
+| [UnShift](#unshift-js-arrayunshift-) | [PromiseAll Function](#promiseall-function) |
+| [Parameters](#parameters) | [Type Lookup](#type-lookup) |
+| [Trim Left](#trim-left) |  [Trim](#trim) |
+
+
+
+
+
+
+
+<!--
 * [Unknown](#unknown)
 * [If](#if)
 * [Exclude](#exclude)
@@ -40,8 +62,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [Type Lookup](#type-lookup)
 * [Trim Left](#trim-left)
 * [Trim](#trim)
-
-
+ -->
 
 ---
 
