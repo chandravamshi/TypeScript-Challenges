@@ -39,6 +39,8 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 * [PromiseAll Function](#promiseAll-function)
 * [Type Lookup](#type-lookup)
 * [Trim Left](#trim-left)
+* [Trim](#trim)
+
 
 
 ---
@@ -1077,6 +1079,53 @@ type trimed = TrimLeft<'  Hello World  '>
 
 - For the input string `'  Hello World  '`, the leading whitespace characters are removed, resulting in `'Hello World  '`.
 - The expected output matches the behavior of the `TrimLeft` type, as the leading whitespace is correctly removed from the input string.
+
+[Top](#concepts)
+
+---
+
+### Trim
+
+Implement `Trim<T>` which takes an exact string type and returns a new string with the whitespace from both ends removed.
+
+For example:
+
+```typescript
+type trimmed = Trim<'  Hello World  '> // expected to be 'Hello World'
+```
+
+Solution
+
+```typescript
+type Trim<T extends string> = T extends
+  | `${" " | "\n" | "\t"}${infer R}`
+  | `${infer R}${" " | "\n" | "\t"}`
+  ? Trim<R>
+  : T;
+```
+
+Explanation
+
+- We define a conditional type `Trim<T>` that takes an exact string type `T`.
+- The conditional type checks if the string starts or ends with whitespace (space, newline, or tab). If it does, it recursively calls `Trim` on the string without the leading or trailing whitespace.
+- If the string does not start or end with whitespace, it returns the original string as is.
+
+Example
+
+```typescript
+type Test1 = Trim<'str   '>;
+// Expected: 'str'
+
+type Test2 = Trim<'     str     '>;
+// Expected: 'str'
+
+type Test3 = Trim<'   \n\t foo bar \t'>;
+// Expected: 'foo bar'
+```
+
+This solution recursively removes leading and trailing whitespace until none is left, returning the trimmed string.
+
+This should cover all cases where whitespace exists at the beginning or end of the string.
 
 [Top](#concepts)
 
