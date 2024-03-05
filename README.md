@@ -30,6 +30,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [UnShift](#unshift-js-arrayunshift-) | [PromiseAll Function](#promiseall-function) |
 | [Parameters](#parameters) | [Type Lookup](#type-lookup) |
 | [Trim Left](#trim-left) |  [Trim](#trim) |
+| [Capitalize](#capitalize) | | 
 
 
 
@@ -1150,5 +1151,51 @@ This should cover all cases where whitespace exists at the beginning or end of t
 
 [Top](#concepts)
 
+---
+
+### Capitalize
+
+Implement `Capitalize<T>` which converts the first letter of a string to uppercase and leaves the rest as-is.
+
+For example:
+
+```typescript
+type capitalized = Capitalize<'hello world'> // expected to be 'Hello world'
+```
+
+Solution
+
+```typescript
+type Capitalize<T extends string> = T extends `${infer First}${infer Rest}`
+  ? `${Uppercase<First>}${Rest}`
+  : T;
+```
+
+Explanation
+
+- We define a conditional type `Capitalize<T>` that takes an exact string type `T`.
+- The conditional type checks if the string `T` can be split into two parts: the first letter `First` and the rest of the string `Rest`.
+- If the string can be split, it converts the first letter `First` to uppercase using the `Uppercase` utility type and concatenates it with the rest of the string `Rest`.
+- If the string cannot be split (i.e., it's an empty string or a string with only one character), it returns the original string as is.
+
+Example
+
+```typescript
+type Test1 = Capitalize<'hello'>;
+// Expected: 'Hello'
+
+type Test2 = Capitalize<'world'>;
+// Expected: 'World'
+
+type Test3 = Capitalize<'foo bar'>;
+// Expected: 'Foo bar'
+
+type Test4 = Capitalize<'A'>;
+// Expected: 'A'
+```
+
+This solution ensures that the first letter of the string is converted to uppercase while leaving the rest of the string unchanged.
+
+[Top](#concepts)
 
 ---
