@@ -30,7 +30,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [UnShift](#unshift-js-arrayunshift-) | [PromiseAll Function](#promiseall-function) |
 | [Parameters](#parameters) | [Type Lookup](#type-lookup) |
 | [Trim Left](#trim-left) |  [Trim](#trim) |
-| [Capitalize](#capitalize) | | 
+| [Capitalize](#capitalize) | [Replace](#replace)| 
 
 
 
@@ -1195,6 +1195,65 @@ type Test4 = Capitalize<'A'>;
 ```
 
 This solution ensures that the first letter of the string is converted to uppercase while leaving the rest of the string unchanged.
+
+[Top](#concepts)
+
+---
+
+### Replace
+
+Implement `Replace<S, From, To>` which replaces the string `From` with `To` once in the given string `S`.
+
+For example:
+
+```typescript
+type replaced = Replace<'types are fun!', 'fun', 'awesome'> // expected to be 'types are awesome!'
+```
+
+Solution
+
+```typescript
+type Replace<S extends string, From extends string, To extends string> = From extends ''
+  ? S
+  : S extends `${infer Start}${From}${infer End}`
+  ? `${Start}${To}${End}`
+  : S;
+```
+
+Explanation
+
+- We define a conditional type `Replace<S, From, To>` that takes three parameters:
+  - `S`: the original string
+  - `From`: the substring to be replaced
+  - `To`: the replacement string
+- If the string `From` is an empty string, it returns the original string `S` without any modifications.
+- Otherwise, it checks if the string `S` can be split into three parts: `Start`, `From`, and `End`, where `Start` represents the substring before the first occurrence of `From`, and `End` represents the substring after `From`.
+- If the string can be split, it replaces the first occurrence of `From` with `To` and returns the modified string.
+- If the string cannot be split (i.e., `From` is not found in `S`), it returns the original string `S` without any modifications.
+
+Example
+
+```typescript
+type Test1 = Replace<'foobar', 'bar', 'foo'>;
+// Expected: 'foofoo'
+
+type Test2 = Replace<'foobarbar', 'bar', 'foo'>;
+// Expected: 'foofoobar'
+
+type Test3 = Replace<'foobarbar', '', 'foo'>;
+// Expected: 'foobarbar'
+
+type Test4 = Replace<'foobarbar', 'bar', ''>;
+// Expected: 'foobar'
+
+type Test5 = Replace<'foobarbar', 'bra', 'foo'>;
+// Expected: 'foobarbar'
+
+type Test6 = Replace<'', '', ''>;
+// Expected: ''
+```
+
+This solution ensures that the string `From` is replaced with `To` once in the given string `S`. If `From` is an empty string, it returns the original string `S` unchanged.
 
 [Top](#concepts)
 
