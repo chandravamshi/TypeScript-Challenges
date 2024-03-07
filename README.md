@@ -31,6 +31,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [Parameters](#parameters) | [Type Lookup](#type-lookup) |
 | [Trim Left](#trim-left) |  [Trim](#trim) |
 | [Capitalize](#capitalize) | [Replace](#replace)| 
+| [ReplaceAll](#replaceAll)| | 
 
 
 
@@ -1256,5 +1257,53 @@ type Test6 = Replace<'', '', ''>;
 This solution ensures that the string `From` is replaced with `To` once in the given string `S`. If `From` is an empty string, it returns the original string `S` unchanged.
 
 [Top](#concepts)
+
+---
+
+### ReplaceAll
+
+Implement `ReplaceAll<S, From, To>` which replaces all occurrences of the substring `From` with `To` in the given string `S`.
+
+For example:
+```typescript
+type replaced = ReplaceAll<'t y p e s', ' ', ''> // expected to be 'types'
+```
+
+**Solution:**
+
+```typescript
+type ReplaceAll<S extends string, From extends string, To extends string> =
+  // Base case: If From is an empty string, return S unchanged
+  From extends ''
+    ? S
+    : S extends `${infer F}${From}${infer R}` // Try to match From in S
+      ? `${F}${To}${ReplaceAll<R, From, To>}` // Replace From with To and recursively call ReplaceAll
+      : S; // If From is not found, return S unchanged
+```
+
+**Explanation:**
+
+1. **Base Case:** If the substring `From` is an empty string, it means there's nothing to replace, so we return the original string `S` unchanged.
+
+2. **Recursive Case:** If `From` is not empty, we attempt to match it at the beginning of `S`. We use template literal types to decompose `S` into three parts: `${F}` (the substring before the first occurrence of `From`), `${From}` (the substring `From` itself), and `${R}` (the rest of the string after `From`).
+
+3. If `From` is found in `S`, we replace the first occurrence of `From` with `To`, and then recursively call `ReplaceAll` on the remaining part of the string (`R`).
+
+4. If `From` is not found in `S`, we return `S` unchanged.
+
+**Example:**
+
+```typescript
+type replaced = ReplaceAll<'t y p e s', ' ', ''> // expected to be 'types'
+```
+
+- In this example, we want to replace all spaces with an empty string in the input string `'t y p e s'`.
+- The recursive function `ReplaceAll` matches the space `' '` at the beginning of the string.
+- It replaces the space with an empty string and recursively calls itself on the rest of the string.
+- The process continues until all spaces are replaced, resulting in the final output `'types'`.
+
+
+[Top](#concepts)
+
 
 ---
