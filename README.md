@@ -31,7 +31,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [Parameters](#parameters) | [Type Lookup](#type-lookup) |
 | [Trim Left](#trim-left) |  [Trim](#trim) |
 | [Capitalize](#capitalize) | [Replace](#replace)| 
-| [ReplaceAll](#replaceAll)| | 
+| [ReplaceAll](#replaceAll)| [AppendArgument](#appendArgument)| 
 
 
 
@@ -1305,5 +1305,62 @@ type replaced = ReplaceAll<'t y p e s', ' ', ''> // expected to be 'types'
 
 [Top](#concepts)
 
+
+---
+
+
+### AppendArgument 
+
+Problem Statement
+Given a function type `Fn` and an arbitrary type `A`, we want to create a generic type `AppendArgument` that produces a new function type `G`. The type `G` should be the same as `Fn`, but with the appended argument `A` as the last parameter.
+
+Example
+Suppose we have the following function type:
+```typescript
+type Fn = (a: number, b: string) => number;
+```
+We want to create a type `Result` such that:
+```typescript
+type Result = AppendArgument<Fn, boolean>;
+// Expected: (a: number, b: string, x: boolean) => number
+```
+
+Solution
+Let's break down the implementation of `AppendArgument`:
+
+1. **Type Parameters**
+   - `Fn` is the input function type.
+   - `A` is the arbitrary type we want to append.
+
+2. **Conditional Type**
+   - We use a conditional type to infer the argument types and return type of `Fn`.
+   - If `Fn` is a function type, it will match the pattern `(...args: infer Args) => infer R`.
+
+3. **New Function Type `G`**
+   - We construct the new function type `G` by spreading the elements of `Args` (the original function parameters) and adding `A` as the last parameter.
+   - The resulting type is `(...args: [...Args, A]) => R`.
+
+4. **Fallback Case**
+   - If `Fn` does not match the expected pattern (i.e., it's not a function type), we return `never`.
+
+Implementation
+Here's the complete implementation:
+```typescript
+type AppendArgument<Fn extends (...args: any) => unknown, A> = Fn extends (...args: infer Args) => infer R
+  ? (...args: [...Args, A]) => R
+  : never;
+```
+
+Additional Test Cases
+We can also test other scenarios:
+```typescript
+type Case1 = AppendArgument<(a: number, b: string) => number, boolean>;
+// Expected: (a: number, b: string, x: boolean) => number
+
+type Case2 = AppendArgument<() => void, undefined>;
+// Expected: (x: undefined) => void
+```
+
+[Top](#concepts)
 
 ---
