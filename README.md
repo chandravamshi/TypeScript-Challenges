@@ -32,6 +32,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [Trim Left](#trim-left) |  [Trim](#trim) |
 | [Capitalize](#capitalize) | [Replace](#replace)| 
 | [ReplaceAll](#replaceAll)| [AppendArgument](#appendArgument)| 
+| [Permutation](#permutation)|
 
 
 
@@ -1360,6 +1361,66 @@ type Case1 = AppendArgument<(a: number, b: string) => number, boolean>;
 type Case2 = AppendArgument<() => void, undefined>;
 // Expected: (x: undefined) => void
 ```
+
+[Top](#concepts)
+
+---
+
+
+### Permutation 
+
+In TypeScript, we often encounter union types that represent a set of possible values. The `Permutation<T>` generic type helps us generate all possible arrangements (permutations) of elements within a union type `T`.
+
+**Solution**
+
+The `Permutation<T, K = T>` type achieves this by employing a recursive approach:
+
+**Step-by-Step Explanation**
+
+1. **Base Case: Empty Union**
+   - `[T] extends [never]` checks if the union type `T` is empty (represented as a tuple of `never`).
+     - If true, it means there are no elements to permute, so an empty array `[]` is returned.
+
+2. **Recursive Case: Non-Empty Union**
+   - `K extends K` is a seemingly redundant check, but it serves an important purpose. It ensures that `K` can be used as a type without causing type-level errors during recursion.
+     - If true (which it always is), the following logic is executed:
+       - `[K, ...Permutation<Exclude<T, K>>]`:
+         - `K` is included as the first element in the permutation.
+         - `Permutation<Exclude<T, K>>` recursively calls the `Permutation` type with a new union type `Exclude<T, K>`. This type excludes the element `K` from the original union `T`, ensuring that elements are not repeated in the permutation.
+           - The result of the recursive call is prepended with `K` using the spread syntax (`...`), forming the next permutation.
+
+**Example**
+
+```typescript
+type Permutation<T, K = T> = [T] extends [never] ? [] : K extends K ? [K, ...Permutation<Exclude<T, K>>] : never;
+
+type Perm = Permutation<'A' | 'B' | 'C'>; // ['A', 'B', 'C'] | ['A', 'C', 'B'] | ... (all 6 permutations)
+```
+
+**Explanation:**
+
+1. The code defines a generic type `Permutation<T, K = T>`.
+2. The type `Perm` uses `Permutation<'A' | 'B' | 'C'>`.
+
+**Breakdown of Permutations:**
+
+1. First call:
+   - `K = 'A'`.
+   - `Permutation<Exclude<'A' | 'B' | 'C', 'A'>` recursively calls itself with `'B' | 'C'`.
+     - Second call:
+       - `K = 'B'`.
+       - `Permutation<Exclude<'B' | 'C', 'B'>` recursively calls itself with `'C'`.
+         - Third call:
+           - Base case: `'C'` is the last element, so the empty array `[]` is returned.
+       - Prepend `'B'` to the empty array: `['B', []]`.
+     - Prepend `'A'` to `['B', []]`: `['A', 'B', []]`.
+2. Similar recursive calls generate all other permutations.
+
+**Additional Notes**
+
+- The `K extends K` check might seem unnecessary, but it's a common pattern in advanced TypeScript type manipulation to avoid potential type-level errors during recursion.
+- This implementation efficiently generates all permutations without introducing unnecessary duplicates.
+
 
 [Top](#concepts)
 
