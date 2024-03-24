@@ -1425,14 +1425,3 @@ type Perm = Permutation<'A' | 'B' | 'C'>; // ['A', 'B', 'C'] | ['A', 'C', 'B'] |
 [Top](#concepts)
 
 ---
-
-
-unnecessary, but it's a common pattern in advanced TypeScript type manipulation to avoid potential type-level errors during recursion.
-- This implementation efficiently generates all permutations without introducing unnecessary duplicates.
-
-
-[Top](#concepts)
-
---
-
-
