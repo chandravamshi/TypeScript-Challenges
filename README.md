@@ -1425,3 +1425,29 @@ type Perm = Permutation<'A' | 'B' | 'C'>; // ['A', 'B', 'C'] | ['A', 'C', 'B'] |
 [Top](#concepts)
 
 ---
+
+
+
+**Breakdown of Permutations:**
+
+1. First call:
+   - `K = 'A'`.
+   - `Permutation<Exclude<'A' | 'B' | 'C', 'A'>` recursively calls itself with `'B' | 'C'`.
+     - Second call:
+       - `K = 'B'`.
+       - `Permutation<Exclude<'B' | 'C', 'B'>` recursively calls itself with `'C'`.
+         - Third call:
+           - Base case: `'C'` is the last element, so the empty array `[]` is returned.
+       - Prepend `'B'` to the empty array: `['B', []]`.
+     - Prepend `'A'` to `['B', []]`: `['A', 'B', []]`.
+2. Similar recursive calls generate all other permutations.
+
+**Additional Notes**
+
+- The `K extends K` check might seem unnecessary, but it's a common pattern in advanced TypeScript type manipulation to avoid potential type-level errors during recursion.
+- This implementation efficiently generates all permutations without introducing unnecessary duplicates.
+
+
+[Top](#concepts)
+
+---
