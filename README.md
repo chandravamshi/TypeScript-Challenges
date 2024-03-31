@@ -1425,3 +1425,28 @@ type Perm = Permutation<'A' | 'B' | 'C'>; // ['A', 'B', 'C'] | ['A', 'C', 'B'] |
 [Top](#concepts)
 
 ---
+
+### Length of String Literal
+
+**Problem**
+
+Compute the length of a string literal, which behaves like `String#length`.
+
+**Solution**
+
+We can achieve the desired behavior using template literal types and recursion. Here's the implementation:
+
+```typescript
+type LengthOfString<S extends string, L extends any[] = []> = S extends `${infer _}${infer Rest}` ? LengthOfString<Rest, [...L, any]> : L['length'];
+```
+
+Explanation:
+
+- We use a conditional type to check if the string `S` can be split into two parts: the first character and the rest of the string (`Rest`).
+- If `S` can be split, we recursively call `LengthOfString` on the rest of the string (`Rest`) and add an element to an array `L`.
+- If `S` cannot be split (i.e., it's an empty string), we return the length of the array `L`, which corresponds to the length of the original string.
+
+
+[Top](#concepts)
+
+---
