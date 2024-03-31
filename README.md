@@ -32,7 +32,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [Trim Left](#trim-left) |  [Trim](#trim) |
 | [Capitalize](#capitalize) | [Replace](#replace)| 
 | [ReplaceAll](#replaceAll)| [AppendArgument](#appendArgument)| 
-| [Permutation](#permutation)|
+| [Permutation](#permutation)|  [Length of String Literal](#length-of-string-literal)|
 
 
 
