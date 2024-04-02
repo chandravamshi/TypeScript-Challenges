@@ -33,6 +33,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [Capitalize](#capitalize) | [Replace](#replace)| 
 | [ReplaceAll](#replaceAll)| [AppendArgument](#appendArgument)| 
 | [Permutation](#permutation)|  [Length of String Literal](#length-of-string-literal)|
+| [Append to object](#append-to-object)|  | 
 
 
 
