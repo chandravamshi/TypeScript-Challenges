@@ -1449,4 +1449,42 @@ Explanation:
 
 [Top](#concepts)
 
+
+---
+
+### Append to object
+
+**Problem**
+
+Implement a type that adds a new field to an interface. The type should take three arguments: the original interface type `T`, the name of the new field `U`, and the type of the new field `V`. The output should be an object with the new field added to it.
+
+**Example**
+
+```typescript
+// Original interface
+type Test = { id: '1' }
+
+// Add a new field 'value' of type number
+type Result = AppendToObject<Test, 'value', 4>
+// Expect: { id: '1', value: 4 }
+```
+
+**Solution**
+
+We can achieve this by using conditional types and mapped types to create a new type that includes the original fields and the new field. Here's the implementation:
+
+```typescript
+type AppendToObject<T, U extends PropertyKey, V> = Omit<T & Record<U, V>, never>;
+```
+
+Explanation:
+
+- We use the `Omit` utility type to exclude the field with the `never` type from the resulting object. This ensures that only the original fields and the new field are included in the output.
+- We use the `Record` utility type to create a new field with the specified name `U` and type `V`.
+- By intersecting `T & Record<U, V>`, we merge the original object type with the new field, effectively adding the new field to the object.
+
+
+[Top](#concepts)
+
+
 ---
