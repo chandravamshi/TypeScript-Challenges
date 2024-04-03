@@ -33,7 +33,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [Capitalize](#capitalize) | [Replace](#replace)| 
 | [ReplaceAll](#replaceAll)| [AppendArgument](#appendArgument)| 
 | [Permutation](#permutation)|  [Length of String Literal](#length-of-string-literal)|
-| [Append to object](#append-to-object)|  | 
+| [Append to object](#append-to-object)| [Absolute](#absolute) | 
 
 
 
@@ -1487,5 +1487,38 @@ Explanation:
 
 [Top](#concepts)
 
+---
+
+### Absolute
+
+**Problem**
+To implement the `Absolute` type in TypeScript, we can create a type that takes a string, number, or bigint as input and outputs a positive number string representing the absolute value of the input. Here's how you can achieve this:
+
+**Solution** 
+
+```typescript
+type Absolute<T extends string | number | bigint> = `${T}` extends `-${infer R}` ? R : `${T}`;
+
+// Test cases
+type Test1 = -100;
+type Result1 = Absolute<Test1>; // Result1 is "100"
+
+type Test2 = "25";
+type Result2 = Absolute<Test2>; // Result2 is "25"
+
+type Test3 = 75n;
+type Result3 = Absolute<Test3>; // Result3 is "75"
+```
+
+Explanation:
+
+1. We define a type `Absolute` that takes a generic type `T` constrained to `string`, `number`, or `bigint`.
+2. We use a conditional type to check if the input `T` starts with a negative sign `-`. We do this by checking if the string representation of `T` matches the pattern `-${infer R}`.
+3. If `T` is negative, we infer the remaining part of the string after `-` and return it as the result.
+4. If `T` is not negative, we simply return `T` itself.
+
+This implementation effectively handles inputs of type string, number, or bigint and returns their absolute values as positive number strings.
+
+[Top](#concepts)
 
 ---
