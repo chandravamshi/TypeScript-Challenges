@@ -34,6 +34,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [ReplaceAll](#replaceAll)| [AppendArgument](#appendArgument)| 
 | [Permutation](#permutation)|  [Length of String Literal](#length-of-string-literal)|
 | [Append to object](#append-to-object)| [Absolute](#absolute) | 
+| [String to Union](#string-to-union)| | 
 
 
 
@@ -1518,6 +1519,32 @@ Explanation:
 4. If `T` is not negative, we simply return `T` itself.
 
 This implementation effectively handles inputs of type string, number, or bigint and returns their absolute values as positive number strings.
+
+[Top](#concepts)
+
+---
+### String to Union
+
+**Problem**
+To implement the `StringToUnion` type in TypeScript, we can create a type that takes a string argument and outputs a union type consisting of each letter in the input string. Here's how you can achieve this:
+
+**Solution**
+```typescript
+type StringToUnion<S extends string> = S extends `${infer First}${infer Rest}` ? First | StringToUnion<Rest> : never;
+
+// Test cases
+type Test = "123";
+type Result = StringToUnion<Test>; // Result is "1" | "2" | "3"
+```
+
+Explanation:
+
+1. We define a type `StringToUnion` that takes a generic type `S` constrained to `string`.
+2. We use a conditional type to split the input string `S` into its first letter (`First`) and the rest of the string (`Rest`).
+3. We construct a union type where each member is either the first letter of the input string or the result of applying `StringToUnion` recursively to the rest of the string.
+4. If `S` is an empty string, the conditional type resolves to `never`, terminating the recursion.
+
+This implementation effectively converts each letter of the input string into a separate member of a union type. Let me know if you have any questions or need further clarification!
 
 [Top](#concepts)
 
