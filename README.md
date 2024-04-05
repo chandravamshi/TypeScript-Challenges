@@ -34,7 +34,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [ReplaceAll](#replaceAll)| [AppendArgument](#appendArgument)| 
 | [Permutation](#permutation)|  [Length of String Literal](#length-of-string-literal)|
 | [Append to object](#append-to-object)| [Absolute](#absolute) | 
-| [String to Union](#string-to-union)| | 
+| [String to Union](#string-to-union)| [Merge](#merge) | 
 
 
 
@@ -1545,6 +1545,42 @@ Explanation:
 4. If `S` is an empty string, the conditional type resolves to `never`, terminating the recursion.
 
 This implementation effectively converts each letter of the input string into a separate member of a union type. Let me know if you have any questions or need further clarification!
+
+[Top](#concepts)
+
+---
+
+### Merge
+
+**Problem**
+To merge two types where keys of the second type override keys of the first type, you can use TypeScript's utility types like `Omit` and `UnionToIntersection`. Here's how you can achieve this:
+
+**Solution**
+
+```typescript
+type Merge<A, B> = {
+  [K in keyof (A & B)]: K extends keyof B ? B[K] : K extends keyof A ? A[K] : never;
+};
+
+// Test cases
+type Foo = {
+  name: string;
+  age: string;
+};
+type Coo = {
+  age: number;
+  sex: string;
+};
+
+type Result = Merge<Foo, Coo>; // Result is {name: string, age: number, sex: string}
+```
+
+Explanation:
+
+1. We use the mapped type syntax to iterate over each key (`K`) in the union of keys from both `A` and `B` types.
+2. For each key `K`, we check if `K` exists in `B`. If it does, we use the type from `B`, otherwise, we check if `K` exists in `A`. If it does, we use the type from `A`.
+3. If `K` exists in neither `A` nor `B`, we use `never` type.
+4. The resulting type is the merged type with keys from `B` overriding keys from `A`.
 
 [Top](#concepts)
 
