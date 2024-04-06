@@ -35,6 +35,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [Permutation](#permutation)|  [Length of String Literal](#length-of-string-literal)|
 | [Append to object](#append-to-object)| [Absolute](#absolute) | 
 | [String to Union](#string-to-union)| [Merge](#merge) | 
+| [KebabCase](#kebabCase)| [](#) | 
 
 
 
@@ -1583,5 +1584,49 @@ Explanation:
 4. The resulting type is the merged type with keys from `B` overriding keys from `A`.
 
 [Top](#concepts)
+
+---
+
+### KebabCase
+
+**Problem**
+
+This TypeScript type, `KebabCase`, converts camelCase or PascalCase strings into kebab-case.
+
+
+**Type Definition**
+
+```typescript
+type KebabCase<S> = S extends `${infer First}${infer Rest}` ?
+        Rest extends Uncapitalize<Rest> ?
+            `${Lowercase<First>}${KebabCase<Rest>}` :
+            `${Lowercase<First>}-${KebabCase<Uncapitalize<Rest>>}` :
+        S;
+```
+
+**Example**
+
+```typescript
+type FooBarBaz = KebabCase<"FooBarBaz">;
+// Result: "foo-bar-baz"
+```
+
+**Explanation**
+
+The `KebabCase` type is defined using TypeScript conditional types. Here's how it works:
+
+1. We use a conditional type to split the input string `S` into its first character `First` and the rest of the string `Rest`.
+2. We check if `Rest` is already in kebab-case or if it's an empty string by comparing it with its `Uncapitalize` version.
+3. If `Rest` is already in kebab-case or it's an empty string, we simply concatenate the lowercase `First` character with the rest of the string.
+4. If `Rest` is not in kebab-case, we recursively call `KebabCase` on its `Uncapitalize` version to convert it to kebab-case. We then concatenate the lowercase `First` character with the kebab-case version of `Rest`, separated by a hyphen.
+5. If `S` is an empty string, we return it as is.
+
+**Notes**
+
+- This implementation assumes the input string is in either camelCase or PascalCase.
+- The resulting string will be in kebab-case format.
+
+[Top](#concepts)
+
 
 ---
