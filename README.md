@@ -35,7 +35,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [Permutation](#permutation)|  [Length of String Literal](#length-of-string-literal)|
 | [Append to object](#append-to-object)| [Absolute](#absolute) | 
 | [String to Union](#string-to-union)| [Merge](#merge) | 
-| [KebabCase](#kebabCase)| [](#) | 
+| [KebabCase](#kebabCase)| [Diff](#diff) | 
 
 
 
@@ -1628,5 +1628,51 @@ The `KebabCase` type is defined using TypeScript conditional types. Here's how i
 
 [Top](#concepts)
 
+
+---
+### Diff
+
+**Problem:**
+Get an object that represents the difference between two types `O` and `O1`.
+
+**Solution:**
+```typescript
+type Diff<O, O1> = Omit<O & O1, keyof (O | O1)>;
+```
+
+**Example:**
+```typescript
+type Foo = {
+  name: string;
+  age: string;
+};
+
+type Bar = {
+  name: string;
+  age: string;
+  gender: number;
+};
+
+type Difference = Diff<Foo, Bar>;
+// Difference type will be { gender: number }
+```
+
+**Explanation:**
+
+1. **Define Types**: We have two types, `Foo` and `Bar`, representing different sets of properties.
+
+2. **Diff Type**: We define a type `Diff<O, O1>` using the `Omit` utility type, which creates a new type by excluding specified properties from an existing type. In this case, we aim to exclude the properties that are common to both types `O` and `O1` from their intersection.
+
+3. **Intersection**: We use the intersection operator `&` to create the intersection of types `O` and `O1`, which contains only the properties that exist in both types.
+
+4. **Union of Keys**: We use `keyof (O | O1)` to obtain the union of all keys from types `O` and `O1`, representing all unique properties present in either type.
+
+5. **Omitting Common Properties**: We apply `Omit` to the intersection type to exclude the properties that are common to both types `O` and `O1`, as determined by the union of keys. This results in a type representing the difference between `O` and `O1`, containing only the properties that exist in one type but not the other.
+
+6. **Example**: In the provided example, `Diff<Foo, Bar>` will result in the type `{ gender: number }`, as `Bar` has the `gender` property which is not present in `Foo`.
+
+By using the `Diff` type, we can easily determine the difference between two types and obtain an object representing the unique properties of each type.
+
+[Top](#concepts)
 
 ---
