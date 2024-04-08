@@ -35,7 +35,8 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [Permutation](#permutation)|  [Length of String Literal](#length-of-string-literal)|
 | [Append to object](#append-to-object)| [Absolute](#absolute) | 
 | [String to Union](#string-to-union)| [Merge](#merge) | 
-| [KebabCase](#kebabCase)| [Diff](#diff) | 
+| [KebabCase](#kebabCase)| [Diff](#diff) |  
+| [AnyOf](#anyOf)| [](#) | 
 
 
 
@@ -1674,5 +1675,52 @@ type Difference = Diff<Foo, Bar>;
 By using the `Diff` type, we can easily determine the difference between two types and obtain an object representing the unique properties of each type.
 
 [Top](#concepts)
+
+---
+
+
+### AnyOf 
+
+Implement Python liked any function in the type system. A type takes the Array and returns true if any element of the Array is true. If the Array is empty, return false.
+
+```typescript
+type Falsy = false | '' | null | undefined | 0 | [] | Record<any, never>
+```
+
+Here, `Falsy` is a union type representing values that are considered falsy in JavaScript:
+- `false`: Boolean `false`
+- `''`: Empty string
+- `null`: Null value
+- `undefined`: Undefined value
+- `0`: Zero
+- `[]`: Empty array
+- `Record<any, never>`: An object with keys of any type and values of type `never`, essentially an empty object.
+
+```typescript
+type AnyOf<T extends readonly any[]> = T extends Falsy[] ? false : true;
+```
+
+Now, let's break down the `AnyOf` type:
+- `T extends readonly any[]`: This constrains `T` to be an array of any type (`any[]`), where each element is readonly (`readonly`).
+- `T extends Falsy[] ? false : true`: This is a conditional type that checks if `T` is an array containing only values that are considered falsy according to the `Falsy` type. If it is, it returns `false`; otherwise, it returns `true`.
+
+Examples:
+
+1. ```typescript
+   type Sample1 = AnyOf<[1, "", false, [], {}]>; // true
+   ```
+
+   In this case, the array `[1, "", false, [], {}]` contains values that are not considered falsy according to the `Falsy` type. Therefore, the `AnyOf` type returns `true`.
+
+2. ```typescript
+   type Sample2 = AnyOf<[0, "", false, [], {}]>; // false
+   ```
+
+   In this case, the array `[0, "", false, [], {}]` contains values that are considered falsy according to the `Falsy` type (`0`, `""`, `false`, `[]`, `{}`). Therefore, the `AnyOf` type returns `false`.
+
+So, the `AnyOf` type correctly determines whether any element in the array is truthy. It returns `true` if any element is truthy, and `false` if all elements are falsy.
+
+[Top](#concepts)
+
 
 ---
