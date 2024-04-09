@@ -161,6 +161,57 @@ In summary, while both `unknown` and `any` are types that represent "anything", 
 
 ---
 
+### `null`, `undefined`, and `never`
+
+1. null:
+- **Definition**: `null` represents the intentional absence of any object value. It is a special value in JavaScript that denotes a variable has no value or an empty value.
+- **Usage**: It is commonly used to signify the absence of a value that should be present.
+- **Example**:
+  ```typescript
+  let x: number | null = null;
+  ```
+
+2. undefined:
+- **Definition**: `undefined` represents a variable that has been declared but has not been assigned a value yet. It also indicates a variable that has been explicitly set to `undefined`.
+- **Usage**: It typically indicates that a variable is uninitialized or has been explicitly set to `undefined`.
+- **Example**:
+  ```typescript
+  let y: number | undefined;
+  console.log(y); // undefined
+
+  let z: number = undefined;
+  ```
+
+3. never:
+- **Definition**: `never` represents the type of values that never occur. It is used to denote functions that never return, variables that are never assigned, or conditional branches that are never reached.
+- **Usage**: It is often used in type systems to indicate unreachable code or values that cannot occur.
+- **Example**:
+  ```typescript
+  function throwError(message: string): never {
+    throw new Error(message);
+  }
+
+  function infiniteLoop(): never {
+    while (true) {}
+  }
+
+  let unreachableVariable: never;
+
+  function getSomeValue(): never {
+    throw new Error('This function always throws an error');
+  }
+  ```
+
+Summary:
+- `null` is used to represent the absence of a value.
+- `undefined` represents the absence of an initialized value or an explicitly set value.
+- `never` is used to represent values that never occur or functions that never return.
+- Use `null` and `undefined` when you need to signify the absence of a value or the uninitialized state of a variable.
+- Use `never` when you want to denote values or functions that never occur or return. It's often used in advanced type systems to catch unreachable code or to indicate that certain conditions cannot happen.
+
+
+---
+
 ### If 
 
 ```typescript
