@@ -201,6 +201,17 @@ In summary, while both `unknown` and `any` are types that represent "anything", 
     throw new Error('This function always throws an error');
   }
   ```
+  
+  The return type of the `throwError` function is `never` because the function never completes its execution normally. Instead, it always throws an error, which causes the program to terminate abruptly.
+  
+  In TypeScript, the `never` type represents values that never occur. Functions with a return type of `never` are considered to not return a value at all, or to always throw an error, loop indefinitely, or have an unreachable endpoint.
+  
+  In the case of the `throwError` function:
+  - It accepts a `message` parameter of type `string`.
+  - It throws an `Error` object with the provided `message`.
+  - Since an error is thrown and control never reaches the end of the function, TypeScript infers that the return type of the function is `never`.
+  
+  So, while the function does throw an `Error` object, it never returns a value of that type because it never completes its execution normally. Instead, it causes an abrupt termination of the program flow. Therefore, its return type is `never`.
 
 Summary:
 - `null` is used to represent the absence of a value.
@@ -209,6 +220,32 @@ Summary:
 - Use `null` and `undefined` when you need to signify the absence of a value or the uninitialized state of a variable.
 - Use `never` when you want to denote values or functions that never occur or return. It's often used in advanced type systems to catch unreachable code or to indicate that certain conditions cannot happen.
 
+
+**More Explantion**:
+
+Definition:
+- `null` is a special value in JavaScript that represents the intentional absence of any object value. It is often used to denote that a variable does not currently reference any object.
+- Unlike `undefined`, which indicates that a variable has not been assigned a value, `null` is an explicit value that can be assigned to a variable to signify that it intentionally has no value.
+- In TypeScript, `null` is considered a type and can be assigned to variables to represent the absence of an object value.
+
+Usage:
+- `null` is commonly used to signify that a variable that should reference an object currently has no value.
+- It can be used to initialize variables, parameters, or properties when the absence of a value is expected.
+- Developers may use `null` as a placeholder value until an actual object reference is assigned to the variable.
+
+Example:
+```typescript
+let myObject: SomeType | null = null;
+// Here, 'myObject' can either refer to an object of type 'SomeType' or be 'null', indicating the absence of an object value.
+
+function findObjectByKey(key: string): SomeType | null {
+    // Some logic to search for an object based on the key
+    // If the object is not found, return 'null'
+    return null;
+}
+```
+
+In this example, `null` is used to represent the absence of an object value when no valid object is available. It is explicitly assigned to variables or returned from functions to denote the intentional absence of a value.
 
 ---
 
