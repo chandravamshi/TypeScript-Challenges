@@ -36,7 +36,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [Append to object](#append-to-object)| [Absolute](#absolute) | 
 | [String to Union](#string-to-union)| [Merge](#merge) | 
 | [KebabCase](#kebabCase)| [Diff](#diff) |  
-| [AnyOf](#anyOf)| [](#) | 
+| [AnyOf](#anyOf)| [IsNever](#isNever) | 
 
 
 
@@ -1810,5 +1810,32 @@ So, the `AnyOf` type correctly determines whether any element in the array is tr
 
 [Top](#concepts)
 
+
+---
+
+### IsNever
+
+**Problem**
+To implement the `IsNever` type, we can use conditional types to check if the input type `T` resolves to `never`. If `T` is `never`, we return `true`; otherwise, we return `false`. Here's how you can implement it:
+
+**Solution**
+```typescript
+type IsNever<T> = [T] extends [never] ? true : false;
+
+// Test cases
+type A = IsNever<never>;        // true
+type B = IsNever<undefined>;    // false
+type C = IsNever<null>;         // false
+type D = IsNever<[]>;           // false
+type E = IsNever<number>;       // false
+```
+
+Explanation:
+- `[T] extends [never]` is a conditional type that checks if the input type `T` is assignable to `never`.
+- If `T` is indeed `never`, the conditional type resolves to `true`; otherwise, it resolves to `false`.
+
+This implementation correctly returns `true` if the input type is `never`, and `false` otherwise, as demonstrated by the provided test cases.
+
+[Top](#concepts)
 
 ---
