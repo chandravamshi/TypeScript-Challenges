@@ -37,6 +37,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [String to Union](#string-to-union)| [Merge](#merge) | 
 | [KebabCase](#kebabCase)| [Diff](#diff) |  
 | [AnyOf](#anyOf)| [IsNever](#isNever) | 
+| [IsUnion](#isUnion)| [](#) | 
 
 
 
@@ -1835,6 +1836,68 @@ Explanation:
 - If `T` is indeed `never`, the conditional type resolves to `true`; otherwise, it resolves to `false`.
 
 This implementation correctly returns `true` if the input type is `never`, and `false` otherwise, as demonstrated by the provided test cases.
+
+[Top](#concepts)
+
+---
+
+### IsUnion
+
+**Problem**
+
+Implement a type IsUnion, which takes an input type T and returns whether T resolves to a union type.
+
+For example:
+
+```typescript
+type case1 = IsUnion<string> // false
+type case2 = IsUnion<string | number> // true
+type case3 = IsUnion<[string | number]> // false
+```
+
+**Solution**
+
+```typescript
+type IsUnion<T, U = T> = [T] extends [never]
+    ? false
+    : T extends U
+        ? Exclude<U, T> extends never
+            ? false
+            : true
+        : false;
+```
+
+1. Basic Structure:
+- `IsUnion` is a generic type that takes two type parameters, `T` and `U`.
+- `U` is assigned the default value of `T`, ensuring it defaults to the same type as `T`.
+
+2. Check if `T` is `never`:
+- `[T] extends [never] ? false` checks if `T` is `never`. If it is, the result is `false`, indicating that `never` is not a union type.
+
+3. Check if `T` is assignable to `U`:
+- `T extends U ? ...` checks if `T` is assignable to `U`.
+- If `T` is assignable to `U`, it means `T` is not a union type. The next step checks if the types in `U` exclude `T`.
+
+4. Check if types in `U` exclude `T`:
+- `Exclude<U, T>` removes types in `T` from `U`. If `T` is a subset of `U`, the result will contain the remaining types in `U`.
+- `Exclude<U, T> extends never ? false : true` checks if the result of `Exclude<U, T>` is `never`. If it is, it means all types in `U` are included in `T`, indicating that `T` is not a union type.
+- If `Exclude<U, T>` is not `never`, it means there are remaining types in `U` after excluding `T`, indicating that `T` is a union type.
+
+Example:
+Let's use the `IsUnion` type to check if various types are union types:
+
+```typescript
+type Case1 = IsUnion<string>;                      // false (string is not a union type)
+type Case2 = IsUnion<string | number>;             // true (string | number is a union type)
+type Case3 = IsUnion<[string | number]>;           // false ([string | number] is not a union type)
+type Case4 = IsUnion<number | string | boolean>;   // true (number | string | boolean is a union type)
+```
+
+In this example:
+- `Case1` returns `false` because `string` is not a union type.
+- `Case2` returns `true` because `string | number` is a union type.
+- `Case3` returns `false` because `[string | number]` is not a union type; it's an array with a union type as its element type.
+- `Case4` returns `true` because `number | string | boolean` is a union type.
 
 [Top](#concepts)
 
