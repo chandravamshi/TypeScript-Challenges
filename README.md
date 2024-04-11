@@ -37,7 +37,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [String to Union](#string-to-union)| [Merge](#merge) | 
 | [KebabCase](#kebabCase)| [Diff](#diff) |  
 | [AnyOf](#anyOf)| [IsNever](#isNever) | 
-| [IsUnion](#isUnion)| [](#) | 
+| [IsUnion](#isUnion)| [ReplaceKeys](#replaceKeys) | 
 
 
 
@@ -1907,7 +1907,7 @@ Certainly! Below is the content you can use for the README file:
 
 ---
 
-ReplaceKeys 
+### ReplaceKeys 
 
 **Problem**
 
