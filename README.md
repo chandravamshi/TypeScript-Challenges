@@ -2004,3 +2004,50 @@ This TypeScript solution provides a straightforward way to determine if a given 
 
 ---
 
+
+---
+
+### IsOdd 
+
+This TypeScript solution checks if a given number is odd.
+
+Problem 
+
+Given a number, determine if it is an odd number.
+
+Solution
+
+The solution defines a TypeScript type `IsOdd<T>` which evaluates to `true` if the input number `T` is odd, and `false` otherwise.
+
+```typescript
+type OddDigits = 1 | 3 | 5 | 7 | 9;
+type IsOdd<T extends number> = `${T}` extends `${number}${OddDigits}` ? true : false;
+```
+
+Explanation
+
+- `OddDigits`: Defines a union type representing odd digits: 1, 3, 5, 7, 9.
+- `IsOdd<T>`: A conditional type that checks if a given number `T` matches the pattern of ending with an odd digit.
+
+   - `${T}`: Converts the input number `T` into a string.
+   - `${number}${OddDigits}`: Defines the pattern where the string starts with any number followed by an odd digit.
+   - Conditional Check: If the string representation of `T` matches the pattern, the type evaluates to `true`; otherwise, it evaluates to `false`.
+
+Examples
+
+```typescript
+// Example 1: Checking if 3 is odd
+type Result1 = IsOdd<3>; // true
+
+// Example 2: Checking if 6 is odd
+type Result2 = IsOdd<6>; // false
+```
+
+Conclusion
+
+This TypeScript solution provides a straightforward way to determine if a given number is odd using template literal types and conditional types.
+
+[Top](#concepts)
+
+---
+
