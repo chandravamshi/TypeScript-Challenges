@@ -38,7 +38,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [KebabCase](#kebabCase)| [Diff](#diff) |  
 | [AnyOf](#anyOf)| [IsNever](#isNever) | 
 | [IsUnion](#isUnion)| [ReplaceKeys](#replaceKeys) | 
-| [IsOdd](#isOdd)| [](#) | 
+| [IsOdd](#isOdd)| [PercentageParser](#percentageParser) | 
 
 
 
@@ -1999,6 +1999,54 @@ type Result2 = IsOdd<6>; // false
 Conclusion
 
 This TypeScript solution provides a straightforward way to determine if a given number is odd using template literal types and conditional types.
+
+[Top](#concepts)
+
+---
+
+
+### PercentageParser
+
+**Problem**
+
+The `PercentageParser` type is a TypeScript type that parses string inputs according to a specific regular expression pattern to extract three components: plus or minus sign, number, and percent sign.
+
+**Solution**
+
+```typescript
+type PercentageParser<A extends string> = A extends `${infer S extends "+" | "-"}${infer R}`
+	? R extends `${infer N}%`
+		? [S, N, "%"]
+		: [S, R, ""]
+	: A extends `${infer N}%`
+		? ["", N, "%"]
+		: ["", A, ""];
+```
+
+**Explanation**
+
+1. The type `PercentageParser` takes a generic type `A` that extends `string`.
+2. We use conditional types (`extends`) to check two cases:
+   - If `A` matches the pattern `${infer S extends "+" | "-"}${infer R}`, meaning it starts with an optional plus or minus sign followed by any characters (`R`), we proceed to the next check.
+   - If `A` does not match the above pattern, we check if it matches the pattern `${infer N}%`, meaning it ends with a percent sign (`%`).
+3. Inside the first conditional block:
+   - If `R` matches the pattern `${infer N}%`, meaning it ends with a percent sign, we return an array with the extracted plus/minus sign (`S`), the extracted number (`N`), and the percent sign (`%`).
+   - If `R` does not match the above pattern, we return an array with the extracted plus/minus sign (`S`), the remaining characters (`R`), and an empty string (`""`).
+4. Inside the second conditional block:
+   - If `A` matches the pattern `${infer N}%`, meaning it ends with a percent sign, we return an array with an empty string (since there is no plus/minus sign), the extracted number (`N`), and the percent sign (`%`).
+   - If `A` does not match the above pattern, we return an array with an empty string (since there is no plus/minus sign), the original string (`A`), and an empty string (`""`).
+
+
+```typescript
+type rr = PercentageParser<"+100%">;
+```
+
+In this example, the input string is `"+100%"`. Breaking it down:
+- The plus/minus sign (`S`) is `+`.
+- The remaining characters (`R`) are `100%`.
+- The number (`N`) is `100`.
+- The percent sign (`%`) is present.
+- So, the result will be `["+", "100", "%"]`.
 
 [Top](#concepts)
 
