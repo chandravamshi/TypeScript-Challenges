@@ -39,6 +39,8 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [AnyOf](#anyOf)| [IsNever](#isNever) | 
 | [IsUnion](#isUnion)| [ReplaceKeys](#replaceKeys) | 
 | [IsOdd](#isOdd)| [PercentageParser](#percentageParser) | 
+| [Reverse](#reverse)| [](#) | 
+
 
 
 
@@ -2052,5 +2054,39 @@ In this example, the input string is `"+100%"`. Breaking it down:
 
 ---
 
+### Reverse
+
+Problem
+
+Implement the type version of `Array.reverse`
+
+Solution
+
+```typescript
+type Reverse<T extends any[]> = T extends [infer F, ...infer R] ? [...Reverse<R>, F] : [];
+```
+
+Explanation
+
+1. **Type Parameters**: The type `Reverse` takes a single type parameter `T`, which is expected to be an array type.
+
+2. **Conditional Type**: The implementation starts with a conditional type check using the `extends` keyword. It checks if the input type `T` extends an array pattern `[infer F, ...infer R]`.
+
+3. **Deconstruction**: If `T` matches the pattern `[infer F, ...infer R]`, it means `T` is an array with at least one element. Here:
+   - `infer F` extracts the type of the first element of `T`.
+   - `...infer R` extracts the type of the rest of the elements of `T` as an array.
+
+4. **Recursion**: The implementation recursively applies the `Reverse` type to the rest of the array `R`. This recursive call effectively reverses the order of elements in `R`.
+
+5. **Concatenation**: After reversing the rest of the array, the first element `F` is added back to the reversed array using the spread operator (`...`). This results in the entire array being reversed.
+
+6. **Base Case**: If the input array `T` is empty (i.e., it doesn't match the pattern `[infer F, ...infer R]`), the conditional type returns an empty array `[]`. This serves as the base case for the recursion, ensuring that the recursion terminates when there are no more elements to reverse.
+
+In summary, the `Reverse` type uses conditional types and recursion to reverse the elements of an array type `T`, effectively providing a type-level equivalent of the `Array.reverse` method in JavaScript.
+
+
+[Top](#concepts)
+
+----
 
 
