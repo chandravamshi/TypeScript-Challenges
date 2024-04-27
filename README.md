@@ -39,7 +39,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [AnyOf](#anyOf)| [IsNever](#isNever) | 
 | [IsUnion](#isUnion)| [ReplaceKeys](#replaceKeys) | 
 | [IsOdd](#isOdd)| [PercentageParser](#percentageParser) | 
-| [Reverse](#reverse)| [](#) | 
+| [Reverse](#reverse)| [isOdd](#IsOdd) | 
 
 
 
@@ -2088,5 +2088,39 @@ In summary, the `Reverse` type uses conditional types and recursion to reverse t
 [Top](#concepts)
 
 ----
+### IsOdd
 
+Problem:
+
+Determine if a given number is odd using TypeScript's static type system. The type system should evaluate whether a numeric literal belongs to the set of odd numbers using type inference and template literals.
+
+Solution:
+
+```typescript
+type OddNumbers = 1 | 3 | 5 | 7 | 9;
+
+type IsOdd<T extends number> = `${T}` extends `${number}${OddNumbers}` ? true : false;
+```
+
+Explanation:
+Define the `OddNumbers` Type
+```typescript
+type OddNumbers = 1 | 3 | 5 | 7 | 9;
+```
+- The `OddNumbers` type explicitly lists single-digit odd numbers. This type is crucial because it serves as a reference to check if other numbers are odd based on their last digit.
+
+Create the `IsOdd` Type
+```typescript
+type IsOdd<T extends number> = `${T}` extends `${number}${OddNumbers}` ? true : false;
+```
+- **Template Literal Type**: Here, the number type `T` is first converted into a string using template literals (`` `${T}` ``).
+- **Extends Keyword**: In the context of types, `extends` is used for conditional checks. The expression `` `${T}` extends `${number}${OddNumbers}` `` checks if the string representation of `T` matches any string that ends with an odd number digit listed in `OddNumbers`.
+- The conditional type will evaluate to `true` if `T`, when converted to a string, ends with `1`, `3`, `5`, `7`, or `9`. For example, if `T` is `13`, it matches because it ends with `3`, which is part of `OddNumbers`.
+- If `T` does not end with an odd digit, the type evaluates to `false`.
+
+
+
+[Top](#concepts)
+
+----
 
