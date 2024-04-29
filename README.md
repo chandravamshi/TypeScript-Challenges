@@ -40,6 +40,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [IsUnion](#isUnion)| [ReplaceKeys](#replaceKeys) | 
 | [IsOdd](#isOdd)| [PercentageParser](#percentageParser) | 
 | [Reverse](#reverse)| [isOdd](#IsOdd) | 
+| [MergeAll](#mergeAll)| [](#) |
 
 
 
@@ -2118,6 +2119,50 @@ type IsOdd<T extends number> = `${T}` extends `${number}${OddNumbers}` ? true : 
 - The conditional type will evaluate to `true` if `T`, when converted to a string, ends with `1`, `3`, `5`, `7`, or `9`. For example, if `T` is `13`, it matches because it ends with `3`, which is part of `OddNumbers`.
 - If `T` does not end with an odd digit, the type evaluates to `false`.
 
+
+
+[Top](#concepts)
+
+----
+### MergeAll
+
+Problem
+Merge variadic number of types into a new type. If the keys overlap, its values should be merged into an union.
+
+For Example:
+```typescript
+type Foo = { a: 1; b: 2 }
+type Bar = { a: 2 }
+type Baz = { c: 3 }
+
+type Result = MergeAll<[Foo, Bar, Baz]> // expected to be { a: 1 | 2; b: 2; c: 3 }
+```
+
+Solution
+
+```typescript
+type MergeAll<T extends any[]> = T extends [infer Head, ...infer Rest]
+    ? Merge<Head, MergeAll<Rest>>
+    : {};
+
+type Merge<A, B> = {
+    [K in keyof A | keyof B]: K extends keyof A
+        ? K extends keyof B
+            ? A[K] | B[K]
+            : A[K]
+        : K extends keyof B
+            ? B[K]
+            : never;
+};
+```
+
+Let's break down the implementation:
+
+- **MergeAll**: This is the main type that recursively merges all types in the input tuple `T`. It checks if `T` matches the pattern `[infer Head, ...infer Rest]`. If it does, it merges the first type `Head` with the result of merging the rest of the types `MergeAll<Rest>`. If `T` is empty, it returns an empty object `{}`.
+
+- **Merge**: This type merges two types `A` and `B` into a new type. It iterates over the keys of `A` or `B` (combined) using the union of their keys `keyof A | keyof B`. For each key `K`, it checks if `K` is a key of `A` or `B` using conditional statements. If `K` is a key of both `A` and `B`, it merges their corresponding values into a union. If `K` is only present in one of the types, it includes the value of that type. If `K` is not present in either type, it assigns `never`.
+
+With these types in place, you can use `MergeAll` to merge a variadic number of types into a single type, ensuring that overlapping keys are merged into unions.
 
 
 [Top](#concepts)
