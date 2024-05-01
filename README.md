@@ -40,7 +40,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [IsUnion](#isUnion)| [ReplaceKeys](#replaceKeys) | 
 | [IsOdd](#isOdd)| [PercentageParser](#percentageParser) | 
 | [Reverse](#reverse)| [isOdd](#IsOdd) | 
-| [MergeAll](#mergeAll)| [](#) |
+| [MergeAll](#mergeAll)| [TrimRigh](#trimRigh) |
 
 
 
@@ -2163,6 +2163,41 @@ Let's break down the implementation:
 - **Merge**: This type merges two types `A` and `B` into a new type. It iterates over the keys of `A` or `B` (combined) using the union of their keys `keyof A | keyof B`. For each key `K`, it checks if `K` is a key of `A` or `B` using conditional statements. If `K` is a key of both `A` and `B`, it merges their corresponding values into a union. If `K` is only present in one of the types, it includes the value of that type. If `K` is not present in either type, it assigns `never`.
 
 With these types in place, you can use `MergeAll` to merge a variadic number of types into a single type, ensuring that overlapping keys are merged into unions.
+
+
+[Top](#concepts)
+
+----
+### TrimRight
+
+Problem
+
+Implement TrimRight<T> which takes an exact string type and returns a new string with the whitespace ending removed.
+
+Example:
+
+```typescript
+type Trimmed = TrimRight<'   Hello World    '> // expected to be '   Hello World'
+```
+
+Solution:
+
+```typescript
+type WhiteSpace = ' ' | '\n'|'\t'
+type TrimRight<S extends string> = S extends `${infer F}${WhiteSpace}` ? TrimRight<F> : S
+```
+
+Explanation:
+
+1. **WhiteSpace Type Definition**: Define a type `WhiteSpace` that includes the possible whitespace characters at the end of the string (`' '`, `'\n'`, `'\t'`).
+
+2. **TrimRight Type**: Define a type `TrimRight` that takes an exact string type `S`.
+
+3. **Base Case Check**: Check if the string `S` ends with a whitespace character from the `WhiteSpace` type.
+
+4. **Recursion**: If the string ends with whitespace, recursively call `TrimRight` with the substring `F` (obtained by removing the last character), effectively removing the trailing whitespace.
+
+5. **Return Original String**: If the string doesn't end with whitespace, return the original string `S`.
 
 
 [Top](#concepts)
