@@ -40,8 +40,9 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [IsUnion](#isUnion)| [ReplaceKeys](#replaceKeys) | 
 | [IsOdd](#isOdd)| [PercentageParser](#percentageParser) | 
 | [Reverse](#reverse)| [isOdd](#IsOdd) | 
-| [MergeAll](#mergeAll)| [TrimRigh](#trimRigh) |
+| [MergeAll](#mergeAll)| [TrimRight](#trimRight) |
 
+| [All](#all)| [](#) |
 
 
 
@@ -2199,6 +2200,106 @@ Explanation:
 
 5. **Return Original String**: If the string doesn't end with whitespace, return the original string `S`.
 
+
+[Top](#concepts)
+
+----
+
+### All
+
+Returns true if all elements of the list are equal to the second parameter passed in, false if there are any mismatches.
+
+Example
+```typescript
+type Test1 = [1, 1, 1]
+type Test2 = [1, 1, 2]
+
+type Todo = All<Test1, 1> // should be same as true
+type Todo2 = All<Test2, 1> // should be same as false
+```
+
+This TypeScript utility includes two custom types:
+1. `IsEqual<A, B>` - A type that checks if two types `A` and `B` are equivalent.
+2. `All<T, V>` - A type that evaluates if all elements of a tuple `T` are equal to a value `V`.
+
+
+```typescript
+type IsEqual<A, B> = 
+  (<T>() => T extends A ? 1 : 2) extends 
+  (<T>() => T extends B ? 1 : 2) ? true : false;
+```
+
+**Purpose**:
+- Determines if two types, `A` and `B`, are equivalent using TypeScript's advanced type system.
+
+**Mechanism**:
+- Defines a generic function type `<T>() => T extends A ? 1 : 2` that evaluates to `1` if a generic type `T` extends `A`, otherwise `2`.
+- Similarly, it checks if `T` extends `B`.
+- By comparing these function types, TypeScript assesses whether `A` and `B` behave identically for all possible types `T`.
+
+`All<T extends any[], V>`
+
+```typescript
+type All<T extends any[], V> = T extends [infer First, ...infer Rest]
+  ? IsEqual<First, V> extends true
+    ? Rest extends []
+      ? true
+      : All<Rest, V>
+    : false
+  : true;
+```
+
+**Purpose**:
+- Checks if all elements in the tuple type `T` are equal to a given type `V`.
+
+**Mechanism**:
+- Uses conditional types and type inference.
+- If `T` can be decomposed into a first element (`First`) and the rest (`Rest`):
+  - It first checks if `First` is equal to `V` using the `IsEqual` type.
+  - If true and `Rest` is empty, returns `true`.
+  - If `Rest` is not empty, recursively checks the rest of the elements in `Rest` using the same logic.
+  - If `First` is not equal to `V`, returns `false`.
+- If `T` is an empty tuple, it returns `true` by default.
+
+
+To address the scenarios involving `any` and `unknown` with the desired outcomes, we need a specific approach to handle these types accurately. The primary challenge here is the inherent nature of `any` and `unknown` in TypeScript:
+
+- `any` is effectively a wildcard that can be assigned to and from any type.
+- `unknown` is a safe counterpart to `any` where you must perform some type of checking before performing most operations.
+
+
+```typescript
+type IsEqual<A, B> = 
+  (<T>() => T extends A ? 1 : 2) extends 
+  (<T>() => T extends B ? 1 : 2) ? true : false;
+
+type All<T extends any[], V> = T extends [infer First, ...infer Rest]
+  ? IsEqual<First, V> extends true
+    ? Rest extends []
+      ? true
+      : All<Rest, V>
+    : false
+  : true;
+
+// Test cases
+type Test1 = [1, 1, 1];
+type Test2 = [1, 1, 2];
+type TestAny = [any];
+type TestUnknown = [unknown];
+type TestUnion = [1, 1, 2];
+
+type Todo = All<Test1, 1>;                // true
+type Todo2 = All<Test2, 1>;               // false
+type TodoAny = All<TestAny, unknown>;     // false
+type TodoUnknown = All<TestUnknown, any>; // false
+type TodoUnion = All<TestUnion, 1 | 2>;   // false
+```
+
+1. **IsEqual Type Helper**:
+   - The `IsEqual` helper type is used to accurately compare types, including tricky types like `any` and `unknown`. It utilizes conditional types in a function signature to determine if two types are equivalent. This is important because straightforward comparisons involving `any` or `unknown` can be misleading due to their flexible nature in TypeScript's type system.
+
+2. **Type Checking in All**:
+   - We integrate `IsEqual` in the main recursive check of `All`. This way, for each element (`First`), we determine if it is equivalent to `V` using our `IsEqual` utility, which handles the subtleties of `any` and `unknown`.
 
 [Top](#concepts)
 
