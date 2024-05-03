@@ -41,8 +41,8 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [IsOdd](#isOdd)| [PercentageParser](#percentageParser) | 
 | [Reverse](#reverse)| [isOdd](#IsOdd) | 
 | [MergeAll](#mergeAll)| [TrimRight](#trimRight) |
-
-| [All](#all)| [](#) |
+| [All](#all)| [EndsWith](#endsWith) |
+| [](#)| [](#) |
 
 
 
@@ -2305,3 +2305,44 @@ type TodoUnion = All<TestUnion, 1 | 2>;   // false
 
 ----
 
+Here's how you can structure your README file to include the problem, solution, and step-by-step explanation for the `EndsWith` type:
+
+---
+### EndsWith
+
+Problem: 
+
+Implement EndsWith<T, U> which takes two exact string types and returns whether T ends with U.
+
+Example:
+
+```typescript
+type a = EndsWith<'abc', 'bc'> // expected to be true
+type b = EndsWith<'abc', 'abc'> // expected to be true
+type c = EndsWith<'abc', 'd'> // expected to be false
+```
+
+---
+
+Solution:
+
+```typescript
+type EndsWith<T extends string, U extends string> = T extends `${infer _Start}${U}` ? true : false;
+```
+
+---
+
+Explanation:
+
+1. **Type Parameters**: Define two type parameters `T` and `U`, representing the two exact string types.
+
+2. **EndsWith Type**: Define a type `EndsWith` that takes the two string types `T` and `U`.
+
+3. **Pattern Matching**: Utilize a conditional type to check if `T` ends with `U`.
+
+4. **Pattern Matching Explanation**: If `T` can be matched as `${infer _Start}${U}`, where `_Start` represents any prefix of `T` and `U` represents the suffix to match, then return `true`. Otherwise, return `false`.
+
+
+[Top](#concepts)
+
+----
