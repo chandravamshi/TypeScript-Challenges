@@ -42,7 +42,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [Reverse](#reverse)| [isOdd](#IsOdd) | 
 | [MergeAll](#mergeAll)| [TrimRight](#trimRight) |
 | [All](#all)| [EndsWith](#endsWith) |
-| [](#)| [](#) |
+| [Drop Char](#dropChar)| [](#) |
 
 
 
@@ -2342,6 +2342,50 @@ Explanation:
 
 4. **Pattern Matching Explanation**: If `T` can be matched as `${infer _Start}${U}`, where `_Start` represents any prefix of `T` and `U` represents the suffix to match, then return `true`. Otherwise, return `false`.
 
+
+[Top](#concepts)
+
+----
+
+
+
+Certainly! Below is the README file format for the problem statement, your solution, and a clear explanation:
+
+---
+
+### DropChar
+
+Problem
+
+Drop a specified character from a string.
+
+Example:
+
+```typescript
+type Butterfly = DropChar<' b u t t e r f l y ! ', ' '> // 'butterfly!'
+```
+
+Solution
+
+```typescript
+type DropChar<S, C> = S extends `${infer F}${infer R}` 
+  ? F extends C 
+    ? DropChar<R, C> 
+    : `${F}${DropChar<R, C>}` 
+  : S
+```
+
+Explanation
+
+This solution utilizes TypeScript's conditional types to iterate through the input string and drop the specified character. Here's how it works:
+
+- The type `DropChar` takes two parameters: `S` (the input string) and `C` (the character to drop).
+- It uses template literal types to destructure the input string into two parts: the first character `F` and the rest of the string `R`.
+- If the first character `F` matches the character to drop `C`, it recursively calls `DropChar` on the rest of the string `R` with the same character `C`. This effectively skips the character to drop.
+- If `F` doesn't match `C`, it concatenates `F` with the result of recursively calling `DropChar` on `R`.
+- The recursion continues until the entire string is processed, at which point the modified string without the specified character is returned.
+
+This solution effectively removes all occurrences of the specified character from the input string.
 
 [Top](#concepts)
 
