@@ -42,7 +42,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [Reverse](#reverse)| [isOdd](#IsOdd) | 
 | [MergeAll](#mergeAll)| [TrimRight](#trimRight) |
 | [All](#all)| [EndsWith](#endsWith) |
-| [Drop Char](#dropChar)| [](#) |
+| [Drop Char](#dropChar)| [Join](#join) |
 
 
 
@@ -2386,6 +2386,44 @@ This solution utilizes TypeScript's conditional types to iterate through the inp
 - The recursion continues until the entire string is processed, at which point the modified string without the specified character is returned.
 
 This solution effectively removes all occurrences of the specified character from the input string.
+
+[Top](#concepts)
+
+----
+
+### Join
+
+Problem: Implement the type version of Array.join
+
+Implement a type `Join<T, U>` that takes an array `T` and a string or number `U`, and returns a string with elements of `T` joined together with `U`.
+
+Example:
+```typescript
+type Res = Join<["a", "p", "p", "l", "e"], "-">; // Expected: 'a-p-p-l-e'
+type Res1 = Join<["Hello", "World"], " ">; // Expected: 'Hello World'
+type Res2 = Join<["2", "2", "2"], 1>; // Expected: '21212'
+type Res3 = Join<["o"], "u">; // Expected: 'o'
+```
+
+Solution:
+
+```typescript
+type Join<T, U extends number | string> = T extends [infer F, ...infer R]
+  ? R extends []
+    ? `${F & string}`
+    : `${F & string}${U}${Join<R, U>}`
+  : "";
+```
+
+Explanation:
+- The `Join` type takes two parameters: `T`, which is an array of any type, and `U`, which can be either a string or a number.
+- It uses conditional type to check if `T` can be deconstructed into a head `F` and a rest `R`.
+- If `T` can be deconstructed, it recursively calls `Join` on the rest `R` while stitching the head `F` with `U`.
+- If `T` cannot be deconstructed, it means the array is empty, so it returns an empty string `""`.
+- The stitching operation is performed using template literal types, which ensure type safety and correct concatenation of elements.
+
+
+
 
 [Top](#concepts)
 
