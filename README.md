@@ -42,7 +42,8 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [Reverse](#reverse)| [isOdd](#IsOdd) | 
 | [MergeAll](#mergeAll)| [TrimRight](#trimRight) |
 | [All](#all)| [EndsWith](#endsWith) |
-| [Drop Char](#dropChar)| [Join](#join) |
+| [Drop Char](#dropChar)| [Join](#join) | 
+| [StartsWith](#startsWith)| [](#) |
 
 
 
@@ -2423,6 +2424,34 @@ Explanation:
 - The stitching operation is performed using template literal types, which ensure type safety and correct concatenation of elements.
 
 
+
+
+[Top](#concepts)
+
+----
+
+
+### StartsWith
+
+Problem: Implement `StartsWith<T, U>` which takes two exact string types and returns whether `T` starts with `U`
+
+
+Example:
+```typescript
+type a = StartsWith<'abc', 'ac'> // expected to be false
+type b = StartsWith<'abc', 'ab'> // expected to be true
+type c = StartsWith<'abc', 'abcd'> // expected to be false
+```
+
+Solution
+```typescript
+type StartsWith<T extends string, U extends string> = T extends `${U}${infer _}` ? true : false;
+```
+
+Explanation:
+
+- `T extends `${U}${infer _}``: This checks if the string `T` starts with the string `U`. Here, `${infer _}` is used to capture the rest of the string after `U`, but we don't actually need it for this task.
+- If `T` starts with `U`, the condition is true, and we return `true`. Otherwise, we return `false`.
 
 
 [Top](#concepts)
