@@ -43,7 +43,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [MergeAll](#mergeAll)| [TrimRight](#trimRight) |
 | [All](#all)| [EndsWith](#endsWith) |
 | [Drop Char](#dropChar)| [Join](#join) | 
-| [StartsWith](#startsWith)| [](#) |
+| [StartsWith](#startsWith)| [Trunc](#trunc) |
 
 
 
@@ -2452,6 +2452,40 @@ Explanation:
 
 - `T extends `${U}${infer _}``: This checks if the string `T` starts with the string `U`. Here, `${infer _}` is used to capture the rest of the string after `U`, but we don't actually need it for this task.
 - If `T` starts with `U`, the condition is true, and we return `true`. Otherwise, we return `false`.
+
+
+[Top](#concepts)
+
+----
+
+### Trunc
+
+**Problem**
+Implement the type version of `Math.trunc`, which takes a string or number and returns the integer part of a number by removing any fractional digits. This should handle edge cases where the input starts with a decimal point.
+
+**Solution**
+The `Trunc` type takes a string or number as input and returns the integer part by removing any fractional digits, correctly handling inputs that start with a decimal point.
+
+```typescript
+type Trunc<T extends string | number> = 
+  `${T}` extends `${infer F}.${infer _}`
+    ? (F extends "" ? "0" : F)
+    : `${T}`;
+```
+
+**Explanation:**
+
+1. **Convert Input to String:** The type `${T}` converts the input type `T` (which can be a string or number) to a string.
+2. **Pattern Matching with Decimal Point:**
+   - `${infer F}.${infer _}`: This pattern checks if the string contains a decimal point.
+     - `F` captures the part before the decimal point.
+     - `_` captures the part after the decimal point.
+   - If the string contains a decimal point:
+     - Check if `F` is an empty string. If it is, return "0".
+     - Otherwise, return `F`, which is the part before the decimal point.
+3. **No Decimal Point:** If the string does not contain a decimal point, return the entire string as it is.
+
+By following the above steps, the `Trunc` type accurately removes any fractional digits from the input and returns the integer part, handling edge cases where the input starts with a decimal point.
 
 
 [Top](#concepts)
