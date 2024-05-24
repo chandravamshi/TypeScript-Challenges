@@ -43,7 +43,8 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [MergeAll](#mergeAll)| [TrimRight](#trimRight) |
 | [All](#all)| [EndsWith](#endsWith) |
 | [Drop Char](#dropChar)| [Join](#join) | 
-| [StartsWith](#startsWith)| [Trunc](#trunc) |
+| [StartsWith](#startsWith)| [Trunc](#trunc) | 
+| [URL Parameters Parser](#uRLParametersParser)| [](#) |
 
 
 
@@ -2486,6 +2487,66 @@ type Trunc<T extends string | number> =
 3. **No Decimal Point:** If the string does not contain a decimal point, return the entire string as it is.
 
 By following the above steps, the `Trunc` type accurately removes any fractional digits from the input and returns the integer part, handling edge cases where the input starts with a decimal point.
+
+
+[Top](#concepts)
+
+----
+
+
+### URL Parameters Parser
+
+Problem
+
+You're required to implement a type-level parser to parse URL params string into an Union.
+The parser should extracts URL parameters from a URL string and returns a union of these parameters.
+
+
+Examples
+
+```typescript
+type Test1 = ParseUrlParams<':id'>;
+// Result: 'id'
+
+type Test2 = ParseUrlParams<'posts/:id'>;
+// Result: 'id'
+
+type Test3 = ParseUrlParams<'posts/:id/:user'>;
+// Result: 'id' | 'user'
+```
+
+Solution
+
+```typescript
+type ParseUrlParams<T> = T extends `${infer F}:${infer P}`
+  ? P extends `${infer Q}/${infer R}`
+    ? `${Q}` | ParseUrlParams<R>
+    : `${P}`
+  : never;
+```
+
+Explanation
+
+1. **Base Case**: 
+   - If the input string does not match the expected pattern, it returns `never`.
+
+2. **Recursive Pattern Matching**:
+   - **First Level**: `T extends `${infer F}:${infer P}``
+     - This pattern checks if the string `T` contains a segment that starts with a colon (`:`).
+     - `F` captures the part before the colon, and `P` captures the part after the colon.
+   - **Second Level**: `P extends `${infer Q}/${infer R}``
+     - This pattern checks if the part after the colon (`P`) contains a slash (`/`), indicating more parameters.
+     - `Q` captures the parameter name before the slash, and `R` captures the rest of the string after the slash.
+   - **Result Construction**:
+     - If there is a slash, it forms a union type `${Q} | ParseUrlParams<R>`, recursively parsing the rest of the string.
+     - If there is no slash, it simply returns `${P}`, the parameter name.
+   
+How It Works
+
+- The type uses template literal types to decompose the input string into its components and extract parameters.
+- By recursively applying these patterns, it constructs a union type of all parameter names in the URL.
+
+
 
 
 [Top](#concepts)
