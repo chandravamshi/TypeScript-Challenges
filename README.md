@@ -44,7 +44,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [All](#all)| [EndsWith](#endsWith) |
 | [Drop Char](#dropChar)| [Join](#join) | 
 | [StartsWith](#startsWith)| [Trunc](#trunc) | 
-| [URL Parameters Parser](#uRLParametersParser)| [](#) |
+| [URL Parameters Parser](#uRLParametersParser)| [LastIndexOf](#lastIndexOf) |
 
 
 
@@ -2545,6 +2545,74 @@ How It Works
 
 - The type uses template literal types to decompose the input string into its components and extract parameters.
 - By recursively applying these patterns, it constructs a union type of all parameter names in the URL.
+
+
+[Top](#concepts)
+
+----
+
+
+
+### LastIndexOf 
+
+Problem 
+
+Implement the type version of `Array.lastIndexOf`. The type `LastIndexOf<T, U>` takes an array `T` and a type `U`, and returns the index of the last occurrence of `U` in the array `T`. If `U` does not exist in `T`, it should return `-1`.
+
+Examples
+
+```typescript
+type Res1 = LastIndexOf<[1, 2, 3, 2, 1], 2> // expected to be 3
+type Res2 = LastIndexOf<[0, 0, 0], 2> // expected to be -1
+```
+
+Solution
+
+Here’s the TypeScript implementation of the `LastIndexOf` utility type:
+
+```typescript
+// Utility type to check if two types are equal
+type Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2
+  ? true
+  : false;
+
+// Main utility type to find the last index of a type in an array
+type LastIndexOf<T, U> = T extends [...infer R, infer L]
+  ? Equal<L, U> extends true
+    ? R["length"]
+    : LastIndexOf<R, U>
+  : -1;
+```
+
+Explanation
+
+1. **Equal Utility Type**:
+   - `Equal<X, Y>` is used to check if two types `X` and `Y` are equal. It uses type inference and conditional types to compare the two types.
+   - It defines two anonymous generic functions, each taking a type `T`. The functions return `1` if `T` extends `X` (or `Y`), and `2` otherwise. If the two functions are the same, `X` and `Y` are considered equal, returning `true`, otherwise `false`.
+
+2. **LastIndexOf Utility Type**:
+   - `LastIndexOf<T, U>` recursively traverses the array type `T` from right to left, checking if the last element (`L`) is equal to `U`.
+   - It uses TypeScript’s variadic tuple types (`...infer R, infer L`) to decompose the array into a rest part (`R`) and the last element (`L`).
+   - If `L` is equal to `U`, it returns the length of the rest of the array (`R["length"]`), which is the index of the last occurrence of `U`.
+   - If `L` is not equal to `U`, it recursively calls `LastIndexOf` on the rest of the array (`R`).
+   - If `T` is empty (`T extends [...infer R, infer L]` condition fails), it returns `-1`, indicating that `U` is not present in the array.
+
+Example Usage
+
+```typescript
+type Res1 = LastIndexOf<[1, 2, 3, 2, 1], 2> // 3
+type Res2 = LastIndexOf<[0, 0, 0], 2> // -1
+type Res3 = LastIndexOf<[1, 2, 3, 4, 5], 5> // 4
+type Res4 = LastIndexOf<['a', 'b', 'c', 'b'], 'b'> // 3
+type Res5 = LastIndexOf<['x', 'y', 'z'], 'a'> // -1
+```
+
+Additional Notes
+
+- The solution utilizes TypeScript’s type inference capabilities to destructure the array type and compare the elements.
+- The use of variadic tuple types (`...infer R, infer L`) allows for recursive processing of the array from right to left, effectively finding the last occurrence of the specified type.
+- This implementation is purely type-based and operates at compile time, providing type-safe solutions for common array operations.
+
 
 
 
