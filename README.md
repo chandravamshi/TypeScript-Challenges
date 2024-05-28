@@ -45,6 +45,7 @@ I occasionally solve TypeScript challenges. I'll upload my solution for the chll
 | [Drop Char](#dropChar)| [Join](#join) | 
 | [StartsWith](#startsWith)| [Trunc](#trunc) | 
 | [URL Parameters Parser](#uRLParametersParser)| [LastIndexOf](#lastIndexOf) |
+| [IsTuple](#isTuple)| [](#) |
 
 
 
@@ -2615,6 +2616,56 @@ Additional Notes
 
 
 
+
+
+[Top](#concepts)
+
+----
+
+### IsTuple
+
+Problem 
+
+Implement a type `IsTuple`, which takes an input type `T` and returns whether `T` is a tuple type.
+
+Solution
+
+```typescript
+type IsTuple<T> = [T] extends [never] 
+  ? false 
+  : T extends readonly any[]
+    ? number extends T['length']
+      ? false
+      : true
+    : false;
+```
+
+Explanation
+
+1. **Check for `never` type**:
+   - `[T] extends [never]` is used to explicitly check if `T` is `never`. This is because in TypeScript, `never` is a bottom type that represents the type of values that never occur. When `T` is `never`, this condition returns `false`.
+
+2. **Check if `T` is an array or a tuple**:
+   - `T extends readonly any[]` checks if `T` is either an array or a tuple since both extend from `readonly any[]`.
+
+3. **Check if `T['length']` is `number`**:
+   - `number extends T['length']` is used to differentiate between arrays and tuples. For arrays, `T['length']` is `number`, whereas for tuples, `T['length']` is a specific numeric literal type (e.g., `1`, `2`, etc.).
+
+4. **Conditional Logic**:
+   - If `number extends T['length']`, `T` is an array, so the result is `false`.
+   - If not, `T` is a tuple, so the result is `true`.
+
+Example Usage
+
+```typescript
+type case1 = IsTuple<[number]> // true
+type case2 = IsTuple<readonly [number]> // true
+type case3 = IsTuple<number[]> // false
+type case4 = IsTuple<[number, string]> // true
+type case5 = IsTuple<[]> // true
+type case6 = IsTuple<string[]> // false
+type case7 = IsTuple<never> // false
+```
 
 
 [Top](#concepts)
